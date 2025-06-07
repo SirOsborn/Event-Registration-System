@@ -1,7 +1,7 @@
-# Compiled class file
+# Compiled Java class files
 *.class
 
-# Log file
+# Log files
 *.log
 
 # BlueJ files
@@ -21,4 +21,30 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-replay_pid*
+
+# Build directories
+/bin/
+/target/
+/build/
+
+# IDE settings
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# NetBeans
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+.nb-gradle/
+
+# VS Code
+.vscode/
