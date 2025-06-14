@@ -1,5 +1,8 @@
 # Compiled Java class files
 *.class
+.src/com/eventms/*.class
+.src/com/eventms/model/*.class
+.src/com/eventms/service/*.class
 
 # Log files
 *.log
