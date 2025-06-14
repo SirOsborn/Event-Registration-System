@@ -1,3 +1,5 @@
+package com.eventms.model;
+
 public class Event {
 
     public int eventId; 
@@ -48,7 +50,7 @@ public class Event {
         this.title = title;
     }
 
-    public void getOpenEvents() {
+    public String getOpenEvents() {
         
     }
 }
