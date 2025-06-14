@@ -1,24 +1,27 @@
 package com.eventms.model;
 
+/**
+ * Model Class: Represents an event.
+ * All logic is in EventService.
+ */
 public class Event {
 
-    public int eventId; 
-    public String title;
-    public String description;
-    public String location;
-    public String startTime;
-    public String endTime;
-    public String organizerId;
-    public int capacity;
-    public String preferredOccupation;
-    private String eventStatus;
-    public String createdAt;
-    public String eventType;
-    public String language;
+    private int eventId;
+    private String title;
+    private String description;
+    private String location;
+    private String startTime;
+    private String endTime;
+    private int organizerId; // The ID of the user who is the organizer
+    private int capacity;
+    private String preferredOccupation;
+    private String eventStatus; // e.g., "Open", "Closed", "Cancelled"
+    private String createdAt;
+    private String eventType;
+    private String language;
 
-    // Constructor for creating event
     public Event(int eventId, String title, String description, String location, String startTime, String endTime,
-            int capacity, String preferredOccupation, String eventStatus, String eventType, String language) {
+                 int capacity, String preferredOccupation, String eventStatus, String eventType, String language, int organizerId) {
         this.eventId = eventId;
         this.title = title;
         this.description = description;
@@ -30,27 +33,22 @@ public class Event {
         this.eventStatus = eventStatus;
         this.eventType = eventType;
         this.language = language;
+        this.organizerId = organizerId;
+        this.createdAt = java.time.LocalDate.now().toString();
     }
 
-    public static void createEvent(){
+    // --- Getters ---
+    public int getEventId() { return eventId; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public String getLocation() { return location; }
+    public int getCapacity() { return capacity; }
+    public String getEventStatus() { return eventStatus; }
+    public int getOrganizerId() { return organizerId; }
 
-    }
-
-    public static void updateEvent(){
-
-    }
-
-    public static void cancelEvent(){
-
-    }
-
-    //  constructor Find event
-    public Event(int eventId, String title) {
-        this.eventId = eventId;
-        this.title = title;
-    }
-
-    public String getOpenEvents() {
-        
-    }
+    // --- Setters ---
+    public void setTitle(String title) { this.title = title; }
+    public void setDescription(String description) { this.description = description; }
+    public void setLocation(String location) { this.location = location; }
+    public void setEventStatus(String eventStatus) { this.eventStatus = eventStatus; }
 }

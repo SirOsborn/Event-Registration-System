@@ -1,47 +1,27 @@
 package com.eventms.model;
 
-import java.util.List;
-
+/**
+ * Model Class: Represents a user in the system.
+ * This class only holds data. All logic is in UserService.
+ */
 public class User {
-    private static int idCounter = 0;
 
-    public int UserId;
-    public String fullName;         // guest profile
+    private int userId;
+    private String fullName;
     private String email;
-    private String contactNumber;    // guest contact
-    private String password;         // for login
-    public String language;         // language preference
-    public String createdAt;          
-    public String occupation;       // job
-    private String dob;              // date of birth
-    private String role;            // ORGANIZER (true), GUEST (false)
-    public String pastEvent;        // for event in the past 
-    public String eventId;          // ID of the event registered for
-    public char gender;           // gender identity
-  
+    private String contactNumber;
+    private String password; // Should be hashed
+    private String language;
+    private String createdAt;
+    private String occupation;
+    private String dob;
+    private String role; // e.g., "ORGANIZER" or "GUEST"
+    private char gender;
 
-    //P
-    public String getPassword(String inputPassword) {
-        if (inputPassword.equals(this.password)) {
-            return this.password;
-        } else {
-            System.out.println("Wrong password");
-            return null;
-        }
-    }
-    public void setPassword(String newPassword, String oldPassword) {
-        if (oldPassword.equals(this.password)) {
-            this.password = newPassword;
-            System.out.println("Change successful");
-        } else {
-            System.out.println("Wrong password");
-        }
-    }
-
-    // Constructor to registor a account
+    // Constructor to initialize a User object
     public User(int userId, String fullName, String email, String contactNumber, String password, String language,
-            String occupation, String dob, char gender) {
-        UserId = userId;
+                String occupation, String dob, char gender, String role) {
+        this.userId = userId;
         this.fullName = fullName;
         this.email = email;
         this.contactNumber = contactNumber;
@@ -50,22 +30,28 @@ public class User {
         this.occupation = occupation;
         this.dob = dob;
         this.gender = gender;
+        this.role = role;
+        this.createdAt = java.time.LocalDate.now().toString();
     }
+
+    // --- Getters ---
+    public int getUserId() { return userId; }
+    public String getFullName() { return fullName; }
+    public String getEmail() { return email; }
+    public String getContactNumber() { return contactNumber; }
+    public String getLanguage() { return language; }
+    public String getOccupation() { return occupation; }
+    public String getRole() { return role; }
+
+    // --- Setters ---
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public void setContactNumber(String contactNumber) { this.contactNumber = contactNumber; }
+    public void setLanguage(String language) { this.language = language; }
+    public void setOccupation(String occupation) { this.occupation = occupation; }
+    public void setPassword(String newPassword) { this.password = newPassword; }
     
-    public static void createUser(){
-
-    }
-
-    public static void findUserById(){
-
-    }
-    public static void updateUserProfile(){
-
-    }
-    public List getPasEvenList(){
-
-    }
-    public String changeLanguage(){
-        
+    // Special getter for password validation
+    public boolean isPasswordCorrect(String inputPassword) {
+        return this.password.equals(inputPassword);
     }
 }
