@@ -4,78 +4,90 @@
 
 ## Project Description
 
-This project is a role-based **Event Management System** developed in Java. It serves as a platform for organizers to create and manage events, and for guests to discover and register for them. The system supports functionalities like event categorization, waiting lists for full events, attendance tracking, and automated email notifications.
+This project is a role-based **Event Management System** developed in Java. It serves as a platform for organizers to create and manage events, and for guests to discover and register for them. The system is built with a focus on applying Object-Oriented Programming (OOP) principles and a clean, maintainable software architecture that separates data models from business logic.
 
-This system is being developed as a class project, focusing on applying Object-Oriented Programming (OOP) principles and clean software architecture.
+This system is being developed as a class project for the 2024-2025 academic term.
 
 ---
 
 ## Team Members
 
-* [Sun Heng] - Role : TBC
-* [Veat Bunchhour] - Role : TBC
-* [Cheav Vichar] - Role : TBC
-* [Kheang Rachana] - Role : TBC
-* [Mean Sambathpoty] - Role : TBC
+* **[Sun Heng]** - Project Lead
+* **[Veat Bunchhour]** - Team Coordinator
+* **[Cheav Vichar]** - TBC
+* **[Kheang Rachana]** - TBC
+* **[Mean Sambathpoty]** - TBC
 
 ---
 
 ## Project Structure
 
-The project follows a standard Java package structure to keep the code organized and maintainable.
+The project follows a standard Java package structure, separating source code from compiled binaries for a clean workspace.
 
 ```
 EventManagerSystem/
-└── src/
+├── .gitignore
+├── LICENSE
+├── README.md
+├── bin/            <-- All compiled .class files go here
+└── src/            <-- All source .java files
     └── com/
         └── eventms/
             ├── Main.java
-            │
-            ├── model/
-            │   ├── User.java
-            │   ├── Event.java
-            │   └── Registration.java
-            │
-            └── service/
-                ├── UserService.java
-                ├── EventService.java
-                └── RegistrationService.java
+            ├────── model/
+            │       ├── User.java
+            │       ├── Event.java
+            │       └── Registration.java
+            └────── service/
+                    ├── UserService.java
+                    ├── EventService.java
+                    └── RegistrationService.java
 ```
 
 ---
 
 ## How to Build and Run
 
-1.  **Prerequisites**:
-    * Java Development Kit (JDK) 11 or newer.
-    * An IDE like IntelliJ, Eclipse, or VS Code is recommended.
+### Prerequisites
 
-2.  **Clone the Repository**:
+* Java Development Kit (JDK) 11 or newer.
+* An IDE like IntelliJ, Eclipse, or VS Code is recommended for easier development.
+
+### Running from an IDE (Recommended)
+
+1.  Open the project folder (`EventManagerSystem`) in your IDE.
+2.  Locate `src/com/eventms/Main.java`.
+3.  Click the **Run** button next to the `main` method. The IDE will handle compiling and running automatically.
+
+### Building and Running from the Command Line
+
+#### Step 1: Compile the Code
+
+Compile all `.java` files from the `src` directory and place the output `.class` files into the `bin` directory.
+
+1.  Open a terminal in the root project folder (`EventManagerSystem/`).
+2.  Run the `javac` command with the `-d` flag:
     ```bash
-    git clone [https://github.com/SirOsborn/Event-Registration-System.git]
+    javac -d bin src/com/eventms/model/*.java src/com/eventms/service/*.java src/com/eventms/Main.java
     ```
 
-3.  **Compile and Run from the Command Line**:
-    * Navigate to the `src` directory.
-    * Compile all Java files:
-        ```bash
-        javac com/eventms/model/*.java com/eventms/Main.java
-        ```
-    * Run the main application from the `src` directory:
-        ```bash
-        java com.eventms.Main
-        ```
+#### Step 2: Run the Application
 
-4.  **Running from an IDE**:
-    * Open the project folder in your IDE.
-    * Locate `src/com/eventms/Main.java`.
-    * Run the `main` method directly from the IDE.
+Run the compiled application from the `bin` directory using the `-cp` (classpath) flag.
+
+1.  Make sure you are still in the root project folder (`EventManagerSystem/`).
+2.  Run the `java` command:
+    ```bash
+    java -cp bin com.eventms.Main
+    ```
+You will see the simulation output printed to your terminal.
 
 ---
 
 ## Core Features Implemented
 
-* **User Management**: Create `ORGANIZER` and `GUEST` user roles.
-* **Event Creation**: Organizers can create events with details like capacity, category, and date.
-* **Registration System**: Guests can register for events.
-* **Waiting List**: Automatically manages a waiting list when an event is full.
+* **Separation of Concerns:** A clean architecture that separates `model` (data) classes from `service` (logic) classes.
+* **User Management:** `UserService` to create, find, and manage users.
+* **Event Management:** `EventService` allows organizers to create, update, cancel, and find events.
+* **Registration System:** `RegistrationService` handles guest registration for events and enforces capacity limits.
+* **Console-Based Simulation:** `Main.java` provides a comprehensive test suite to demonstrate all backend functionalities.
