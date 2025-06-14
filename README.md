@@ -20,6 +20,18 @@ This system is being developed as a class project for the 2024-2025 academic ter
 
 ---
 
+## Development Workflow
+
+This project follows a collaborative Git workflow to ensure code quality and team synchronization.
+
+1.  **Main Branch:** The `main` branch is the stable, definitive version of the project. Direct pushes to `main` are not allowed.
+2.  **Development Branch:** A `dev` branch is used as the primary integration branch for new features.
+3.  **Feature Branches:** All new work (features, bug fixes) must be done on a separate feature branch (e.g., `feature/user-login`, `fix/registration-bug`).
+4.  **Pull Requests (PRs):** When a feature is complete, the developer opens a Pull Request to merge their feature branch into the `dev` branch.
+5.  **Code Review:** At least one other team member must review the Pull Request to check for bugs, style, and correctness before it can be merged. This maintains high code quality.
+
+---
+
 ## Project Structure
 
 The project follows a standard Java package structure, separating source code from compiled binaries for a clean workspace.
