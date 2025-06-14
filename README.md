@@ -25,19 +25,21 @@ This system is being developed as a class project, focusing on applying Object-O
 The project follows a standard Java package structure to keep the code organized and maintainable.
 
 ```
-Event-Manager-System/
-├── .gitignore
-├── README.md
+EventManagerSystem/
 └── src/
-└── com/
-└── eventms/
-├── model/
-│   ├── User.java
-│   ├── Event.java
-│   ├── Role.java
-│   └── EventCategory.java
-│
-└── Main.java
+    └── com/
+        └── eventms/
+            ├── Main.java
+            │
+            ├── model/
+            │   ├── User.java
+            │   ├── Event.java
+            │   └── Registration.java
+            │
+            └── service/
+                ├── UserService.java
+                ├── EventService.java
+                └── RegistrationService.java
 ```
 
 ---
