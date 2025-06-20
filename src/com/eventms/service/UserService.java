@@ -16,21 +16,21 @@ public class UserService {
 
     
     // Behavior: createUser()
-    public User createUser(String fullName, String email, String contactNumber, String password, String language, String occupation, String dob, char gender, String role) {
-        User newUser = new User(nextUserId, fullName, email, contactNumber, password, language, occupation, dob, gender, role);
+    public User createUser(String fullName, String email, String contactNumber, String password, String language, String occupation, String dob, char gender) {
+        User newUser = new User(nextUserId, fullName, email, contactNumber, password, language, occupation, dob, gender);
         users.put(nextUserId, newUser);
         System.out.println("User created successfully: " + fullName + " with ID: " + nextUserId);
         nextUserId++;
         return newUser;
     }
 
-
+ 
     // Behavior: findUserById()
     public User findUserById(int userId) {
         return users.get(userId);
     }
     
-  
+
     // Behavior: updateUserProfile()
     public void updateUserProfile(int userId, String newFullName, String newContactNumber, String newOccupation) {
         User user = findUserById(userId);
@@ -47,7 +47,6 @@ public class UserService {
 
     // Behavior: getPastEvents()
     public List<Event> getPastEvents(int userId) {
-        // This requires collaboration with RegistrationService
         System.out.println("Placeholder for getPastEvents(). Returning empty list.");
         return new ArrayList<>();
     }

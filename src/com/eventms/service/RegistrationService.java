@@ -2,7 +2,6 @@ package com.eventms.service;
 
 import com.eventms.model.Event;
 import com.eventms.model.Registration;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,6 @@ public class RegistrationService {
         if (registration != null) {
             registration.setStatus("Cancelled");
             System.out.println("Registration " + registrationId + " has been cancelled.");
-            // In a real system, you would call a method here to check the waiting list.
         }
     }
 }

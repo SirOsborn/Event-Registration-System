@@ -15,12 +15,11 @@ public class User {
     private String createdAt;
     private String occupation;
     private String dob;
-    private String role; // e.g., "ORGANIZER" or "GUEST"
     private char gender;
 
     // Constructor to initialize a User object
     public User(int userId, String fullName, String email, String contactNumber, String password, String language,
-                String occupation, String dob, char gender, String role) {
+                String occupation, String dob, char gender) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
@@ -30,7 +29,6 @@ public class User {
         this.occupation = occupation;
         this.dob = dob;
         this.gender = gender;
-        this.role = role;
         this.createdAt = java.time.LocalDate.now().toString();
     }
 
@@ -41,7 +39,6 @@ public class User {
     public String getContactNumber() { return contactNumber; }
     public String getLanguage() { return language; }
     public String getOccupation() { return occupation; }
-    public String getRole() { return role; }
 
     // --- Setters ---
     public void setFullName(String fullName) { this.fullName = fullName; }

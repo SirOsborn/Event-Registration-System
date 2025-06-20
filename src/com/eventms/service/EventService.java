@@ -2,7 +2,6 @@ package com.eventms.service;
 
 import com.eventms.model.Event;
 import com.eventms.model.User;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,16 +17,10 @@ public class EventService {
 
     // Behavior: createEvent()
     public Event createEvent(String title, String description, String location, String startTime, String endTime,
-                             int capacity, String preferredOccupation, String eventType, String language, User organizer) {
-        
-        if (!"ORGANIZER".equalsIgnoreCase(organizer.getRole())) {
-            System.out.println("Error: Only an ORGANIZER can create an event.");
-            return null;
-        }
-
-        Event newEvent = new Event(nextEventId, title, description, location, startTime, endTime, capacity, preferredOccupation, "Open", eventType, language, organizer.getUserId());
+                             int capacity, String preferredOccupation, String eventType, String language, User creator) {
+        Event newEvent = new Event(nextEventId, title, description, location, startTime, endTime, capacity, preferredOccupation, "Open", eventType, language, creator.getUserId());
         events.put(nextEventId, newEvent);
-        System.out.println("Event '" + title + "' created successfully.");
+        System.out.println("Event '" + title + "' created successfully by " + creator.getFullName() + ".");
         nextEventId++;
         return newEvent;
     }
@@ -45,7 +38,7 @@ public class EventService {
         }
     }
 
-    
+
     // Behavior: cancelEvent()
     public void cancelEvent(int eventId) {
         Event event = findEventById(eventId);

@@ -25,8 +25,8 @@ public class Main {
 
         // 2. Create Users (Behavior: createUser)
         System.out.println("\n--- [STEP 1: Creating Users] ---");
-        User organizer = userService.createUser("Sun Heng", "sun.heng@organizer.com", "012345678", "pass123", "Khmer", "Project Lead", "1999-01-01", 'M', "ORGANIZER");
-        User guest = userService.createUser("Veat Bunchhour", "bunchhour.v@guest.com", "098765432", "pass456", "English", "Student", "2000-02-02", 'M', "GUEST");
+        User organizer = userService.createUser("Sun Heng", "sun.heng@organizer.com", "012345678", "pass123", "Khmer", "Project Lead", "1999-01-01", 'M');
+        User guest = userService.createUser("Veat Bunchhour", "bunchhour.v@guest.com", "098765432", "pass456", "English", "Student", "2000-02-02", 'M');
 
         // 3. Organizer Creates an Event (Behavior: createEvent)
         System.out.println("\n--- [STEP 2: Organizer Creates an Event] ---");
@@ -60,7 +60,7 @@ public class Main {
         registrationService.registerGuest(guest.getUserId(), seminar.getEventId(), "2025-06-15", eventService);
 
         // A second user tries to register for the full event
-        User anotherGuest = userService.createUser("Cheav Vichar", "vichar.c@guest.com", "011223344", "pass789", "English", "Student", "2001-03-03", 'M', "GUEST");
+        User anotherGuest = userService.createUser("Cheav Vichar", "vichar.c@guest.com", "011223344", "pass789", "English", "Student", "2001-03-03", 'M');
         System.out.println("\n" + anotherGuest.getFullName() + " is now trying to register for the full seminar...");
         registrationService.registerGuest(anotherGuest.getUserId(), seminar.getEventId(), "2025-06-15", eventService);
 
