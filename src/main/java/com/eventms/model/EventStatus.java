@@ -2,9 +2,8 @@ package com.eventms.model;
 
 // An enum for the different event statuses.
 public enum EventStatus {
-    PENDING_APPROVAL,
+    FINISHED,
     OPEN,
     CLOSED,
     CANCELLED,
-    REJECTED
 }

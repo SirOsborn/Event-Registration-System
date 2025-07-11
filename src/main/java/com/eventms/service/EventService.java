@@ -1,49 +1,28 @@
 package com.eventms.service;
 
-import com.eventms.model.Event;
-import com.eventms.model.EventStatus;
-import com.eventms.model.Role;
-import com.eventms.model.User;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.eventms.model.Event;
+import com.eventms.model.EventStatus;
 
 // Manages all business logic for Event entities, including the approval workflow.
 public class EventService {
 
-    private final Map<Integer, Event> events = new HashMap<>();
+    private final HashMap<Integer, Event> events = new HashMap<>();
     private int nextEventId = 1;
 
-    // Behavior: createEvent()
-    public Event createEvent(String title, String description, String location, String startTime, String endTime,
-                             int capacity, String preferredOccupation, String eventType, String language, User creator) {
-        
-        EventStatus initialStatus = creator.isVerified() ? EventStatus.OPEN : EventStatus.PENDING_APPROVAL;
-        
-        Event newEvent = new Event(nextEventId, title, description, location, startTime, endTime, capacity, preferredOccupation, initialStatus, eventType, language, creator.getUserId());
-        events.put(nextEventId, newEvent);
-        nextEventId++;
-        System.out.println("Event '" + title + "' created. Status: " + initialStatus);
+    // Create Event
+    public Event createEvent(int eventId, String title, String description, String location, String startTime, String endTime, 
+                int capacity, EventStatus eventStatus, String eventType, int organizerId) {
+        Event newEvent = new Event(nextEventId++, title, description, startTime, endTime, location, capacity, EventStatus.OPEN, eventType, organizerId);
+        events.put(newEvent.getEventId(), newEvent);
+        System.out.println("Event created successfully: " + title + " with ID: " + newEvent.getEventId());
         return newEvent;
     }
 
-    // Behavior: approveEvent()
-    public void approveEvent(User admin, int eventId) {
-        if (admin.getRole() != Role.ADMIN) {
-            System.out.println("ACTION DENIED: Only ADMINs can approve events.");
-            return;
-        }
-        Event event = findEventById(eventId);
-        if (event != null && event.getEventStatus() == EventStatus.PENDING_APPROVAL) {
-            event.setEventStatus(EventStatus.OPEN);
-            System.out.println("SUCCESS: Event '" + event.getTitle() + "' has been approved.");
-        } else {
-            System.out.println("Error: Event not found or not pending approval.");
-        }
-    }
-
-    // Behavior: cancelEvent()
+    // Cancel Event
     public void cancelEvent(int eventId) {
         Event event = findEventById(eventId);
         if (event != null) {
@@ -52,14 +31,25 @@ public class EventService {
         }
     }
     
-    // Behavior: getOpenEvents()
+    // Get all open event
     public List<Event> getOpenEvents() {
         return events.values().stream()
                 .filter(event -> event.getEventStatus() == EventStatus.OPEN)
                 .collect(Collectors.toList());
     }
     
-    // Other methods for EventService
-    public Event findEventById(int eventId) { return events.get(eventId); }
-    public void updateEvent(int eventId, String newTitle, String newDescription) { /* ... */ }
+    //  Update methods for Event Status
+    public Event findEventById(int eventId) {
+        return events.get(eventId);
+    }
+    public void updateEvent(int eventId, String newEventStatus) {
+        Event event = findEventById(eventId);
+        if (event != null) {
+            EventStatus status = EventStatus.valueOf(newEventStatus.toUpperCase());
+            event.setEventStatus(status);
+            System.out.println("Event '" + event.getTitle() + "' status updated to: " + status);
+        } else {
+            System.out.println("Error: Event not found.");
+        }
+    }
 }
