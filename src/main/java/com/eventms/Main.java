@@ -1,38 +1,41 @@
 package com.eventms;
 
+import com.eventms.model.Admin;
 import com.eventms.model.Event;
-import com.eventms.model.EventStatus;
-import com.eventms.model.Registration;
 import com.eventms.model.User;
 import com.eventms.service.EventService;
-import com.eventms.service.RegistrationService;
 import com.eventms.service.UserService;
 
 public class Main {
     public static void main(String[] args) {
         UserService userService = new UserService();
         EventService eventService = new EventService();
-        RegistrationService registrationService = new RegistrationService();
 
-        // Create a user
-        User user = userService.createUser("Alice", "alice@email.com", "123456789", "pass", "EN", "Student", "2000-01-01", 'F');
-        System.out.println("User ID: " + user.getId());
+        // Create a default admin
+        Admin admin = new Admin(1, "Default Admin", "admin@email.com", "000000000", "adminpass", "Administrator", "1990-01-01", 'M');
+        System.out.println("Admin created: " + admin.getFullName() + ", ID: " + admin.getId() + ", Role: " + admin.getRole());
 
-        // Create an event (using overloaded constructor)
-        Event event = new Event(1, "OOP Seminar", "Learn OOP", user.getId());
-        System.out.println("Event ID: " + event.getId());
+        // Test 1: Create a user
+        User user = userService.createUser("Bob", "bob@email.com", "987654321", "adminpass", "EN", "Manager", "1995-05-05", 'M', null);
+        System.out.println("User created: " + user.getFullName() + ", ID: " + user.getId() + ", Role: " + user.getRole());
 
-        // Open the event for registration
-        event.setEventStatus(EventStatus.OPEN);
-        event.setCapacity(2);
+        // Promote user to admin using admin
+        admin.promoteUserToAdmin(user);
+        System.out.println("User promoted by admin. New role: " + user.getRole());
 
-        // Register the user for the event
-        Registration reg = registrationService.registerGuest(user.getId(), event.getId(), "2025-07-11", eventService);
-        if (reg != null) {
-            System.out.println("Registration ID: " + reg.getId());
-        }
-
-        // Show static method usage
-        System.out.println("Total registrations: " + RegistrationService.getTotalRegistrations());
+        // Test 2: Create an event as admin
+        Event event = eventService.createEvent(
+            "Admin Conference",
+            "A conference for admins.",
+            "Main Hall",
+            "2025-08-01 09:00",
+            "2025-08-01 17:00",
+            100,
+            "Manager",
+            "Conference",
+            "EN",
+            admin
+        );
+        System.out.println("Event created: " + event.getTitle() + ", ID: " + event.getId() + ", Status: " + event.getEventStatus());
     }
 }

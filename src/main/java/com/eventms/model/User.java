@@ -17,7 +17,7 @@ public class User implements Identifier {
 
     // Constructor
     public User(int userId, String fullName, String email, String contactNumber, String password,
-                String occupation, String dob, char gender) {
+                String occupation, String dob, char gender, Role role) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
@@ -50,7 +50,7 @@ public class User implements Identifier {
     public void setEmail(String email) { this.email = email; }
     public void setOccupation(String occupation) { this.occupation = occupation; }
     public void setPassword(String newPassword) { this.password = newPassword; }
-    public void setRole(Role role) { this.role = role; }
+    protected void setRole(Role role) { this.role = role; }   // Only Admin can call this and only inside the package because not every user can set their own role
     public void setVerified(boolean verified) { isVerified = verified; }
     public void setDob(String dob) { this.dob = dob; }
     public void setGender(char gender) { this.gender = gender; }

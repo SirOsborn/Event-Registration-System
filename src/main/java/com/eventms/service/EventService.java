@@ -14,9 +14,9 @@ public class EventService {
     private int nextEventId = 1;
 
     // Create Event
-    public Event createEvent(int eventId, String title, String description, String location, String startTime, String endTime, 
-                int capacity, EventStatus eventStatus, String eventType, int organizerId) {
-        Event newEvent = new Event(nextEventId++, title, description, startTime, endTime, location, capacity, EventStatus.OPEN, eventType, organizerId);
+    public Event createEvent(String title, String description, String location, String startTime, String endTime, 
+                int capacity, String preferredOccupation, String eventType, String language, com.eventms.model.User creator) {
+        Event newEvent = new Event(nextEventId++, title, description, location, startTime, endTime, capacity, creator.isVerified() ? EventStatus.OPEN : EventStatus.CLOSED, eventType, creator.getId());
         events.put(newEvent.getEventId(), newEvent);
         System.out.println("Event created successfully: " + title + " with ID: " + newEvent.getEventId());
         return newEvent;

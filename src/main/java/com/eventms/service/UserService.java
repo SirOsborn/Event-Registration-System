@@ -1,11 +1,11 @@
 package com.eventms.service;
 
+import com.eventms.model.Event;
+import com.eventms.model.Role;
+import com.eventms.model.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import com.eventms.model.Event;
-import com.eventms.model.User;
 
 
 // Manages all business logic for User entities, including the verification process.
@@ -16,9 +16,9 @@ public class UserService {
 
 
     // Creates a new user. All new users default to the USER role and are not verified.
-    public User createUser(String fullName, String email, String contactNumber, String password, String language, String occupation, String dob, char gender) {
+    public User createUser(String fullName, String email, String contactNumber, String password, String language, String occupation, String dob, char gender, Role role) {
         // Pass null for role, as the constructor will set the default to USER
-        User newUser = new User(nextUserId, fullName, email, contactNumber, password, occupation, dob, gender);
+        User newUser = new User(nextUserId, fullName, email, contactNumber, password, occupation, dob, gender, null);
         users.put(nextUserId, newUser);
         System.out.println("User created successfully: " + fullName + " with ID: " + nextUserId);
         nextUserId++;
