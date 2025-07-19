@@ -52,7 +52,8 @@ public class User implements Identifier {
     public void setEmail(String email) { this.email = email; }
     public void setOccupation(String occupation) { this.occupation = occupation; }
     public void setPassword(String newPassword) { this.password = newPassword; }
-    protected void setRole(Role role) { this.role = role; }   // Only Admin can call this and only inside the package because not every user can set their own role
+    protected void setRole(Role role) { this.role = role; }   // Only Admin can call this and only inside the package 
+                                                            // because not every user can set their own role
     public void setVerified(boolean verified) { isVerified = verified; }
     public void setDob(String dob) { this.dob = dob; }
     public void setGender(char gender) { this.gender = gender; }
