@@ -1,5 +1,7 @@
 package com.eventms.model;
 
+import java.util.Scanner;
+
 //Model Class: Represents a user with verification and role attributes.
 
 public class User implements Identifier {
@@ -57,4 +59,34 @@ public class User implements Identifier {
 
     @Override
     public int getId() { return userId; }
+    // Display user information
+    @Override
+    public String toString() {
+    return "User{" +
+            "userId=" + userId +
+            ", fullName='" + fullName + '\'' +
+            ", email='" + email + '\'' +
+            ", contactNumber='" + contactNumber + '\'' +
+            ", occupation='" + occupation + '\'' +
+            ", dob='" + dob + '\'' +
+            '}';
+    }
+
+    // Method to Signup
+    public void signUp() {
+        
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Signup with your email");
+
+        System.out.print("Enter your name: ");
+        String fullname = scanner.nextLine();
+
+        System.out.print("Enter your email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Enter your password: ");
+        String password = scanner.nextLine();
+        System.out.println("Registration successful for: " + fullname + " with email: " + email);
+    }
+
 }

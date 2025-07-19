@@ -25,7 +25,7 @@ public class UserService {
         return newUser;
     }
 
-    
+    // Find this admin by id
     // Behavior: findUserById()
     public User findUserById(int userId) {
         return users.get(userId);

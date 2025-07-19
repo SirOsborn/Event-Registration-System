@@ -30,4 +30,15 @@ public class Admin extends User {
             System.out.println("Error: User not found.");
         }
     }
+    @Override
+    public String toString(){
+        return super.toString() + ", Admin Level: " + adminLevel;
+    }
+
+    @Override
+    public void signUp() {
+    super.signUp(); 
+    System.out.println("As admin" + getRole()); 
+    }
+
 }
