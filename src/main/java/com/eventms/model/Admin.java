@@ -1,59 +1,85 @@
 package com.eventms.model;
 
-//Model Class: Represents an admin user with elevated privileges.
 public class Admin extends User {
-
-    private String adminLevel;
+    // Constants
+    private static final String ADMIN_EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@admin\\.com$";
+    private static final String ADMIN_PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$";
 
     public Admin(int userId, String fullName, String email, String contactNumber, String password,
                  String occupation, String dob, char gender) {
-        super(userId, fullName, email, contactNumber, password, occupation, dob, gender, Role.ADMIN);
-        setRole(Role.ADMIN); // Only Admin can call this
-        this.adminLevel = "standard"; // Default admin level
+        super(userId, fullName, email, contactNumber, password, occupation, dob, gender, Role.ADMIN_STANDARD);
+
+        // Set verified status to true as admins are trusted users
+        setVerified(true);
     }
 
-    // Getter and Setter for adminLevel with validation
-    public String getAdminLevel() {
-        return adminLevel;
-    }
-
-    public void setAdminLevel(String adminLevel) {
-        if (adminLevel == null || adminLevel.trim().isEmpty()) {
-            throw new IllegalArgumentException("Admin level cannot be empty");
+    // Override getters and setters with additional conditions
+    @Override
+    public void setEmail(String email) {
+        if (email == null || !email.matches(ADMIN_EMAIL_PATTERN)) {
+            throw new IllegalArgumentException("Invalid admin email format");
         }
-        if (!adminLevel.matches("(?i)(standard|senior|super)")) {
-            throw new IllegalArgumentException("Admin level must be 'standard', 'senior', or 'super'");
-        }
-        this.adminLevel = adminLevel.toLowerCase();
+        super.setEmail(email);
     }
 
-    // Only admin can promote a user to admin with validation
-    public void promoteUserToAdmin(User user) {
+    @Override
+    public void setPassword(String password) {
+        if (password == null || !password.matches(ADMIN_PASSWORD_PATTERN)) {
+            throw new IllegalArgumentException("Invalid admin password format");
+        }
+        super.setPassword(password);
+    }
+
+    // Override equals method to reuse superclass implementation
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Admin)) return false;
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    // Implement static method for Admin
+    public static void greeting() {
+        System.out.println("Welcome Administrator! You have elevated privileges.");
+        System.out.println("Please use your privileges responsibly.");
+    }
+
+    // Ensure admin levels are handled correctly
+    public void upgradeAdminLevel(Role newRole) {
+        if (newRole == null || !newRole.isAdmin()) {
+            throw new IllegalArgumentException("Invalid admin role");
+        }
+        if (newRole.getAccessLevel() <= getRole().getAccessLevel()) {
+            throw new IllegalArgumentException("Cannot downgrade or maintain the same level");
+        }
+        setRole(newRole);
+        System.out.println(String.format("Admin level upgraded to: %s", newRole.getDisplayName()));
+    }
+
+    // Method to promote a user to admin
+    public void promoteUserToAdmin(User user, Role targetAdminRole) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
         }
-        if (user.getRole() == Role.ADMIN) {
-            throw new IllegalArgumentException("User is already an admin");
+        if (targetAdminRole == null || !targetAdminRole.isAdmin()) {
+            throw new IllegalArgumentException("Invalid target admin role");
         }
-        if (!this.isVerified()) {
-            throw new IllegalStateException("Unverified admins cannot promote users");
-        }
-        if (!this.adminLevel.equals("super") && !this.adminLevel.equals("senior")) {
-            throw new IllegalStateException("Only senior or super admins can promote users");
-        }
-        
-        user.setRole(Role.ADMIN);
-        System.out.println("User " + user.getFullName() + " has been promoted to ADMIN.");
-    }
-    @Override
-    public String toString(){
-        return super.toString() + ", Admin Level: " + adminLevel;
-    }
 
-    @Override
-    public void signUp() {
-    super.signUp(); 
-    System.out.println("As admin" + getRole()); 
-    }
+        // Debug statements to verify roles and access levels
+        System.out.println("Promoter Role: " + this.getRole().getDisplayName() + " (Level: " + this.getRole().getAccessLevel() + ")");
+        System.out.println("Target Role: " + targetAdminRole.getDisplayName() + " (Level: " + targetAdminRole.getAccessLevel() + ")");
+        System.out.println("User's Current Role: " + (user.getRole() != null ? user.getRole().getDisplayName() : "None"));
 
+        if (targetAdminRole.getAccessLevel() <= this.getRole().getAccessLevel()) {
+            throw new SecurityException("Cannot promote to the same or lower admin level");
+        }
+
+        user.setRole(targetAdminRole);
+        System.out.println(String.format("User %s promoted to %s", user.getFullName(), targetAdminRole.getDisplayName()));
+    }
 }

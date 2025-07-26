@@ -2,8 +2,10 @@ package com.eventms;
 
 import com.eventms.model.Admin;
 import com.eventms.model.Event;
+import com.eventms.model.EventStatus;
 import com.eventms.model.Registration;
 import com.eventms.model.RegistrationStatus;
+import com.eventms.model.Role;
 import com.eventms.model.User;
 import com.eventms.service.EventService;
 import com.eventms.service.UserService;
@@ -25,6 +27,14 @@ public class Main {
                 System.out.println("✗ Should have failed: Invalid email validation");
             } catch (IllegalArgumentException e) {
                 System.out.println("✓ Email validation works: " + e.getMessage());
+            }
+
+            // Test invalid password
+            try {
+                user.setPassword("short");
+                System.out.println("✗ Should have failed: Invalid password validation");
+            } catch (IllegalArgumentException e) {
+                System.out.println("✓ Password validation works: " + e.getMessage());
             }
 
             // Test invalid contact number
@@ -52,45 +62,33 @@ public class Main {
             Admin standardAdmin = new Admin(1, "Standard Admin", "standard@email.com", "111111111", "adminpass", "Administrator", "1990-01-01", 'M');
             Admin seniorAdmin = new Admin(2, "Senior Admin", "senior@email.com", "222222222", "adminpass", "Administrator", "1990-01-01", 'M');
             
-            // Test admin level validation
-            try {
-                standardAdmin.setAdminLevel("invalid_level");
-                System.out.println("✗ Should have failed: Invalid admin level validation");
-            } catch (IllegalArgumentException e) {
-                System.out.println("✓ Admin level validation works: " + e.getMessage());
-            }
-
-            standardAdmin.setAdminLevel("standard");
-            seniorAdmin.setAdminLevel("senior");
-            System.out.println("✓ Valid admin levels set");
-
-            // Test promotion permissions
+            // Corrected promotion calls
             User regularUser = userService.createUser("Regular User", "regular@email.com", "333333333", "userpass", "EN", "Employee", "1995-05-05", 'M', null);
             
             try {
-                standardAdmin.promoteUserToAdmin(regularUser);
+                standardAdmin.promoteUserToAdmin(regularUser, Role.ADMIN_STANDARD);
                 System.out.println("✗ Should have failed: Standard admin shouldn't be able to promote");
-            } catch (IllegalStateException e) {
+            } catch (SecurityException e) {
                 System.out.println("✓ Promotion permission validation works: " + e.getMessage());
             }
 
-            seniorAdmin.promoteUserToAdmin(regularUser);
+            seniorAdmin.promoteUserToAdmin(regularUser, Role.ADMIN_STANDARD);
             System.out.println("✓ Senior admin successfully promoted user");
 
             System.out.println("\n=== Testing Event Validation ===");
             try {
-                // Test valid event creation
-                Event event = eventService.createEvent(
+                // Corrected Event constructor
+                Event event = new Event(
+                    1,
                     "Tech Conference",
                     "Annual technology conference",
                     "Convention Center",
                     "2025-08-01T09:00",
                     "2025-08-01T17:00",
                     100,
-                    "Professional",
+                    EventStatus.OPEN,
                     "Conference",
-                    "EN",
-                    seniorAdmin
+                    seniorAdmin.getId()
                 );
                 System.out.println("✓ Valid event created: " + event.getTitle());
 
@@ -167,5 +165,80 @@ public class Main {
             System.out.println("✗ Admin tests failed: " + e.getMessage());
         }
 
+        System.out.println("\n=== Comprehensive Testing Script ===");
+
+        try {
+            // Test User creation and validation
+            User user = new User(1, "Alice Johnson", "alice@example.com", "1234567890", "Password1!", "Engineer", "1990-01-01", 'F', Role.USER);
+            System.out.println("✓ User created successfully: " + user);
+
+            // Test invalid email
+            try {
+                user.setEmail("invalid-email");
+            } catch (IllegalArgumentException e) {
+                System.out.println("✓ Email validation works: " + e.getMessage());
+            }
+
+            // Test invalid password
+            try {
+                user.setPassword("short");
+            } catch (IllegalArgumentException e) {
+                System.out.println("✓ Password validation works: " + e.getMessage());
+            }
+
+            // Test Admin creation and promotion
+            Admin admin = new Admin(2, "Bob Admin", "bob@admin.com", "9876543210", "AdminPass1!", "Manager", "1985-05-15", 'M');
+            System.out.println("✓ Admin created successfully: " + admin);
+
+            // Promote user to admin
+            try {
+                admin.promoteUserToAdmin(user, Role.ADMIN_STANDARD);
+                System.out.println("✓ User promoted to admin successfully");
+            } catch (Exception e) {
+                System.out.println("✗ Promotion failed: " + e.getMessage());
+            }
+
+            // Test Event creation
+            Event event = new Event(1, "Tech Summit", "A summit for tech enthusiasts", "Tech Hall", "2025-08-01T09:00", "2025-08-01T17:00", 200, EventStatus.OPEN, "Conference", admin.getId());
+            System.out.println("✓ Event created successfully: " + event);
+
+            // // Test invalid event capacity
+            // try {
+            //     event.setCapacity(-50);
+            // } catch (IllegalArgumentException e) {
+            //     System.out.println("✓ Event capacity validation works: " + e.getMessage());
+            // }
+
+            // Test Registration
+            Registration registration = new Registration(user.getId(), event.getEventId(), "2025-07-20");
+            System.out.println("✓ Registration created successfully: " + registration);
+
+            // Test invalid registration date
+            try {
+                registration.setRegistrationDate("2025/07/20");
+            } catch (IllegalArgumentException e) {
+                System.out.println("✓ Registration date validation works: " + e.getMessage());
+            }
+
+        } catch (Exception e) {
+            System.out.println("✗ Comprehensive testing failed: " + e.getMessage());
+        }
+
+        System.out.println("\n=== Testing promoteUserToAdmin ===");
+        try {
+            // Create a user and an admin
+            User testUser = userService.createUser("Test User", "testuser@email.com", "444444444", "userpassword", "EN", "Employee", "1990-01-01", 'F', null);
+            Admin testAdmin = new Admin(3, "Test Admin", "testadmin@email.com", "555555555", "adminpassword", "Administrator", "1980-01-01", 'M');
+
+            System.out.println("Promoter Role: " + testAdmin.getRole() + " (Level: " + testAdmin.getRole().getAccessLevel() + ")");
+            System.out.println("Target Role: " + Role.ADMIN_STANDARD + " (Level: " + Role.ADMIN_STANDARD.getAccessLevel() + ")");
+            System.out.println("User's Current Role: " + (testUser.getRole() != null ? testUser.getRole() : "None"));
+
+            // Attempt to promote the user
+            testAdmin.promoteUserToAdmin(testUser, Role.ADMIN_STANDARD);
+            System.out.println("✓ User successfully promoted to: " + testUser.getRole());
+        } catch (Exception e) {
+            System.out.println("✗ Promotion test failed: " + e.getMessage());
+        }
     }
 }
