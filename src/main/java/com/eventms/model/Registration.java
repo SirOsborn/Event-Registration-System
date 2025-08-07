@@ -1,7 +1,17 @@
 package com.eventms.model;
 
 //Model Class: Represents a registration
-public class Registration implements Identifier {
+public class Registration implements Displayable {
+    @Override
+    public void displayInfo() {
+        System.out.println("[REGISTRATION DISPLAY]");
+        System.out.println("Registration ID: " + getRegistrationId());
+        System.out.println("User ID: " + getUserId());
+        System.out.println("Event ID: " + getEventId());
+        System.out.println("Registration Date: " + getRegistrationDate());
+        System.out.println("Check-in Time: " + getCheckinTime());
+        System.out.println("Status: " + getStatus());
+    }
 
     private int registrationId;
     private int userId;
@@ -50,17 +60,17 @@ public class Registration implements Identifier {
         return eventId; 
     }
 
-    public RegistrationStatus getStatus() { 
-        return status; 
-    }
-
     public String getRegistrationDate() { 
         return registrationDate; 
     }
 
-    // Only return checkin time if status is CONFIRMED
+    public RegistrationStatus getStatus() { 
+        return status; 
+    }
+
+    // Only return checkin time if status is CONFIRMED or ATTENDED
     public String getCheckinTime() { 
-        if (status != RegistrationStatus.CONFIRMED) {
+        if (status != RegistrationStatus.CONFIRMED && status != RegistrationStatus.ATTENDED) {
             return null;  // Hide checkin time for non-confirmed registrations
         }
         return checkinTime; 
@@ -89,5 +99,13 @@ public class Registration implements Identifier {
     }
 
     @Override
-    public int getId() { return registrationId; }
+    public String toString() {
+        return "Registration{" +
+                "registrationId=" + registrationId +
+                ", userId=" + userId +
+                ", eventId=" + eventId +
+                ", registrationDate='" + registrationDate + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

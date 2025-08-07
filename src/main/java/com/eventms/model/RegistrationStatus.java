@@ -6,6 +6,5 @@ public enum RegistrationStatus {
     CONFIRMED,
     CANCELLED,
     ATTENDED,
-    ABSENT,
-    WAITING_LIST
+    ABSENT
 }

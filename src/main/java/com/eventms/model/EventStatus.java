@@ -4,6 +4,7 @@ package com.eventms.model;
 public enum EventStatus {
     FINISHED,
     OPEN,
+    FULL,
     CLOSED,
-    CANCELLED,
+    CANCELLED
 }
