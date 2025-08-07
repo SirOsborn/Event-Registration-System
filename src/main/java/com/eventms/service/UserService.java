@@ -38,7 +38,7 @@ public class UserService {
         if (user != null) {
             user.setFullName(newFullName);
             user.setContactNumber(newContactNumber);
-            // user.setOccupation(newOccupation);
+            user.setOccupation(newOccupation);
             System.out.println("User profile for ID " + userId + " updated.");
         } else {
             System.out.println("Error: Could not update profile. User not found.");
