@@ -1,6 +1,6 @@
 package com.eventms.model;
 
-// Represents an event creation token issued by admins.
+// Represents an event creation token issued by admins
 public class EventToken implements Displayable {
     private int tokenId;
     private String tokenString;

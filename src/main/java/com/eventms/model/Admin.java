@@ -1,7 +1,7 @@
 package com.eventms.model;
 
 /**
- * Admin class extends User with admin-specific functionality.
+ * Admin class extends User with admin-specific functionality
  */
 public class Admin extends User implements Displayable {
 

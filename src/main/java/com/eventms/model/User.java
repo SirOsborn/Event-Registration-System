@@ -1,7 +1,7 @@
 package com.eventms.model;
 
 
-// User model with validation for all fields. Base class for Organizer and Admin.
+// User model with validation for all fields. Base class for Organizer and Admin
 public class User implements Displayable {
     @Override
     public void displayInfo() {
@@ -29,7 +29,7 @@ public class User implements Displayable {
     protected boolean isVerified;
     protected String createdAt;
 
-    // Constructs a User with validation for all fields.
+    // Constructs a User with validation for all fields
     public User(int userId, String fullName, String email, String contactNumber, String password,
                 String occupation, String dob, char gender) {
         // Direct field assignment with validation to avoid overridable method calls
@@ -163,7 +163,7 @@ public class User implements Displayable {
         this.gender = gender;
     }
 
-    // Returns a string representation of the user (for debugging/logging).
+    // Returns a string representation of the user (for debugging/logging)
     @Override
     public String toString() {
         return "User{" +
