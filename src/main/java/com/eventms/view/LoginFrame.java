@@ -310,26 +310,26 @@ public class LoginFrame extends JFrame {
         
         // Enhanced input validation with specific error messages
         if (email.isEmpty()) {
-            showStatus("❌ Please enter your email address", Color.RED);
+            showStatus("Please enter your email address", Color.RED);
             emailField.requestFocus();
             return;
         }
         
         // Email format validation
         if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-            showStatus("❌ Please enter a valid email address", Color.RED);
+            showStatus("Please enter a valid email address", Color.RED);
             emailField.requestFocus();
             return;
         }
         
         if (password.isEmpty()) {
-            showStatus("❌ Please enter your password", Color.RED);
+            showStatus("Please enter your password", Color.RED);
             passwordField.requestFocus();
             return;
         }
         
         if (password.length() < 6) {
-            showStatus("❌ Password must be at least 6 characters long", Color.RED);
+            showStatus("Password must be at least 6 characters long", Color.RED);
             passwordField.requestFocus();
             return;
         }

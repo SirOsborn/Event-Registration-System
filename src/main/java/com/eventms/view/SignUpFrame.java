@@ -324,10 +324,10 @@ public class SignUpFrame extends JFrame {
         String email = emailField.getText().trim();
         if (!email.isEmpty()) {
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-                showStatus("❌ Invalid email format", Color.RED);
+                showStatus("Invalid email format", Color.RED);
                 emailField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else {
-                showStatus("✓ Valid email format", Color.GREEN);
+                showStatus("Valid email format", Color.GREEN);
                 emailField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
             }
         } else {
@@ -339,13 +339,13 @@ public class SignUpFrame extends JFrame {
         String password = new String(passwordField.getPassword());
         if (!password.isEmpty()) {
             if (password.length() < 6) {
-                showStatus("❌ Password too short (minimum 6 characters)", Color.RED);
+                showStatus("Password too short (minimum 6 characters)", Color.RED);
                 passwordField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else if (!password.matches(".*[a-zA-Z].*")) {
-                showStatus("❌ Password must contain at least one letter", Color.RED);
+                showStatus("Password must contain at least one letter", Color.RED);
                 passwordField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else {
-                showStatus("✓ Password strength good", Color.GREEN);
+                showStatus("Password strength good", Color.GREEN);
                 passwordField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
             }
         } else {
@@ -358,10 +358,10 @@ public class SignUpFrame extends JFrame {
         String confirmPassword = new String(confirmPasswordField.getPassword());
         if (!confirmPassword.isEmpty()) {
             if (!password.equals(confirmPassword)) {
-                showStatus("❌ Passwords do not match", Color.RED);
+                showStatus("Passwords do not match", Color.RED);
                 confirmPasswordField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else if (!password.isEmpty()) {
-                showStatus("✓ Passwords match", Color.GREEN);
+                showStatus("Passwords match", Color.GREEN);
                 confirmPasswordField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
             }
         } else {
@@ -372,11 +372,11 @@ public class SignUpFrame extends JFrame {
     private void validateContactField() {
         String contact = contactNumberField.getText().trim();
         if (!contact.isEmpty()) {
-            if (!contact.matches("^[0-9]{10,15}$")) {
-                showStatus("❌ Contact number must be 10-15 digits only", Color.RED);
+            if (!contact.matches("^[0-9]{9,15}$")) {
+                showStatus("Contact number must be 9-15 digits only", Color.RED);
                 contactNumberField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else {
-                showStatus("✓ Valid contact number", Color.GREEN);
+                showStatus("Valid contact number", Color.GREEN);
                 contactNumberField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
             }
         } else {
@@ -476,94 +476,94 @@ public class SignUpFrame extends JFrame {
         // Check required fields with enhanced error messages
         if (fullNameField.getText().trim().isEmpty()) {
             fullNameField.requestFocus();
-            return "❌ Please enter your full name";
+            return "Please enter your full name";
         }
         
         // Validate full name format (only letters and spaces)
         String fullName = fullNameField.getText().trim();
         if (!fullName.matches("^[a-zA-Z\\s]{2,50}$")) {
             fullNameField.requestFocus();
-            return "❌ Full name should contain only letters and spaces (2-50 characters)";
+            return "Full name should contain only letters and spaces (2-50 characters)";
         }
         
         if (emailField.getText().trim().isEmpty()) {
             emailField.requestFocus();
-            return "❌ Please enter your email address";
+            return "Please enter your email address";
         }
         
         // Enhanced email format validation
         String email = emailField.getText().trim();
         if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             emailField.requestFocus();
-            return "❌ Please enter a valid email address (e.g., user@example.com)";
+            return "Please enter a valid email address (e.g., user@example.com)";
         }
         
         if (contactNumberField.getText().trim().isEmpty()) {
             contactNumberField.requestFocus();
-            return "❌ Please enter your contact number";
+            return "Please enter your contact number";
         }
         
         // Enhanced contact number validation
         String contact = contactNumberField.getText().trim();
-        if (!contact.matches("^[0-9]{10,15}$")) {
+        if (!contact.matches("^[0-9]{9,15}$")) {
             contactNumberField.requestFocus();
-            return "❌ Contact number must be 10-15 digits only (no spaces or special characters)";
+            return "Contact number must be 9-15 digits only (no spaces or special characters)";
         }
         
         String password = new String(passwordField.getPassword());
         if (password.isEmpty()) {
             passwordField.requestFocus();
-            return "❌ Please enter a password";
+            return "Please enter a password";
         }
         
         if (password.length() < 6) {
             passwordField.requestFocus();
-            return "❌ Password must be at least 6 characters long";
+            return "Password must be at least 6 characters long";
         }
         
         // Password strength validation
         if (!password.matches(".*[a-zA-Z].*")) {
             passwordField.requestFocus();
-            return "❌ Password must contain at least one letter";
+            return "Password must contain at least one letter";
         }
         
         String confirmPassword = new String(confirmPasswordField.getPassword());
         if (!password.equals(confirmPassword)) {
             confirmPasswordField.requestFocus();
-            return "❌ Passwords do not match - please check and try again";
+            return "Passwords do not match - please check and try again";
         }
         
         if (occupationField.getText().trim().isEmpty()) {
             occupationField.requestFocus();
-            return "❌ Please enter your occupation";
+            return "Please enter your occupation";
         }
         
         // Validate occupation format
         String occupation = occupationField.getText().trim();
         if (!occupation.matches("^[a-zA-Z\\s]{2,30}$")) {
             occupationField.requestFocus();
-            return "❌ Occupation should contain only letters and spaces (2-30 characters)";
+            return "Occupation should contain only letters and spaces (2-30 characters)";
         }
         
         // Date of birth validation with specific messages
         if (dayComboBox.getSelectedIndex() == 0) {
-            return "❌ Please select your birth day";
+            return "Please select your birth day";
         }
         
         if (monthComboBox.getSelectedIndex() == 0) {
-            return "❌ Please select your birth month";
+            return "Please select your birth month";
         }
         
         if (yearComboBox.getSelectedIndex() == 0) {
-            return "❌ Please select your birth year";
+            return "Please select your birth year";
         }
         
         if (genderComboBox.getSelectedIndex() == 0) {
-            return "❌ Please select your gender";
+            return "Please select your gender";
         }
         
         if (!termsCheckBox.isSelected()) {
-            return "❌ Please accept the terms and conditions to continue";
+            return "Please accept the terms and conditions to continue";
         }
         
         return null; // No validation errors
