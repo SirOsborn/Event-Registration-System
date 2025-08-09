@@ -31,6 +31,16 @@ if ($LASTEXITCODE -eq 0) {
     exit 1
 }
 
+# Compile view classes (GUI components)
+Write-Host "Compiling view classes..." -ForegroundColor Cyan
+javac -d "build/classes" -cp "build/classes;src/main/java" src/main/java/com/eventms/view/*.java
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "✓ View classes compiled successfully" -ForegroundColor Green
+} else {
+    Write-Host "✗ View compilation failed" -ForegroundColor Red
+    exit 1
+}
+
 # Compile main class
 Write-Host "Compiling main class..." -ForegroundColor Cyan
 javac -d "build/classes" -cp "build/classes" src/main/java/com/eventms/Main.java

@@ -12,6 +12,7 @@ This project is a **comprehensive Event Management System** developed in Java wi
 - **Token-based Event Creation** - Secure token system for event management
 - **Password Management** - Secure hashing, password changes, and reset functionality
 - **Session Management** - Comprehensive login/logout system
+- **GUI Interface** - Java Swing-based graphical user interface with login and signup forms
 - **Clean Build System** - Separate compilation with automated build scripts
 
 This system demonstrates advanced OOP concepts and secure authentication patterns.
@@ -106,7 +107,14 @@ Event-ms/
 
 1. **Run the application** (auto-builds if needed):
    ```powershell
+   # Console demo version
    .\run.ps1
+   
+   # GUI version
+   .\run.ps1 -gui
+   
+   # Show help
+   .\run.ps1 -help
    ```
 
 2. **Build only**:
@@ -129,7 +137,11 @@ Event-ms/
 
 2. **Run the application**:
    ```bash
+   # Console demo version
    java -cp "build/classes" com.eventms.Main
+   
+   # GUI version
+   java -cp "build/classes" com.eventms.Main --gui
    ```
 
 ### Running from an IDE
@@ -170,6 +182,21 @@ Event-ms/
 - **Comprehensive Testing** - Full authentication flow demonstration in Main.java
 - **Error Handling** - Proper exception handling with user-friendly messages
 - **Separation of Concerns** - Clean architecture separating models, services, and main logic
+- **GUI Interface** - Java Swing-based graphical user interface
+
+### GUI Features
+- **Login Form** - Professional login interface with email and password fields
+- **Sign Up Form** - Comprehensive registration form with validation
+  - Full name, email, contact number validation
+  - Password confirmation and strength checking
+  - Date of birth selector with dropdown menus
+  - Gender selection and terms agreement
+- **Main Dashboard** - Post-login application interface
+  - User profile display and management
+  - Navigation menu for different features
+  - Status indicators and quick actions
+- **Form Validation** - Real-time validation with user-friendly error messages
+- **Responsive Design** - Clean, modern interface that works across different screen sizes
 
 ### Demo Capabilities
 The system includes a comprehensive demo that showcases:

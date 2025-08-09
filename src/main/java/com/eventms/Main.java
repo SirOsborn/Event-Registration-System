@@ -2,9 +2,32 @@ package com.eventms;
 
 import com.eventms.model.*;
 import com.eventms.service.*;
+import com.eventms.view.LoginFrame;
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+        // Check if GUI mode is requested
+        if (args.length > 0 && args[0].equals("--gui")) {
+            launchGUI();
+            return;
+        }
+        
+        // Default console mode
+        runConsoleDemo();
+    }
+    
+    private static void launchGUI() {
+        System.out.println("Launching Event Management System GUI...");
+        
+        SwingUtilities.invokeLater(() -> {
+            UserService userService = new UserService();
+            LoginFrame loginFrame = new LoginFrame(userService);
+            loginFrame.setVisible(true);
+        });
+    }
+    
+    private static void runConsoleDemo() {
         System.out.println("=== COMPLETE EVENT MANAGEMENT SYSTEM WITH AUTHENTICATION ===\n");
 
         // Initialize services
