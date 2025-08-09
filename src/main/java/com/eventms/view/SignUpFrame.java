@@ -2,6 +2,7 @@ package com.eventms.view;
 
 import com.eventms.model.User;
 import com.eventms.service.UserService;
+import com.eventms.view.ui.Theme;
 import java.awt.*;
 import java.util.Calendar;
 import javax.swing.*;
@@ -11,7 +12,9 @@ import javax.swing.*;
  * Provides user registration interface with comprehensive form validation
  */
 public class SignUpFrame extends JFrame {
+    @SuppressWarnings("FieldMayBeFinal")
     private UserService userService;
+    @SuppressWarnings("FieldMayBeFinal")
     private LoginFrame parentFrame;
     
     // Form fields
@@ -35,6 +38,7 @@ public class SignUpFrame extends JFrame {
     public SignUpFrame(UserService userService, LoginFrame parentFrame) {
         this.userService = userService;
         this.parentFrame = parentFrame;
+    Theme.install();
         initializeComponents();
         setupLayout();
         setupEventHandlers();
@@ -53,7 +57,7 @@ public class SignUpFrame extends JFrame {
         // Add helpful tooltips for better user experience
         fullNameField.setToolTipText("Enter your full name (letters and spaces only, 2-50 characters)");
         emailField.setToolTipText("Enter a valid email address (e.g., user@example.com)");
-        contactNumberField.setToolTipText("Enter your phone number (10-15 digits only)");
+        contactNumberField.setToolTipText("Enter your phone number (9-15 digits only)");
         passwordField.setToolTipText("Enter a password (minimum 6 characters, must contain at least one letter)");
         confirmPasswordField.setToolTipText("Re-enter your password to confirm");
         occupationField.setToolTipText("Enter your occupation (letters and spaces only, 2-30 characters)");
@@ -86,8 +90,8 @@ public class SignUpFrame extends JFrame {
         statusLabel = new JLabel(" ");
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         
-        // Style components
-        styleComponents();
+    // Style components
+    styleComponents();
     }
 
     private void populateDateComboBoxes() {
@@ -113,44 +117,27 @@ public class SignUpFrame extends JFrame {
     }
 
     private void styleComponents() {
-        Font labelFont = new Font("Arial", Font.PLAIN, 14);
-        Font buttonFont = new Font("Arial", Font.BOLD, 14);
-        
-        // Style buttons
-        signUpButton.setFont(buttonFont);
-        signUpButton.setBackground(new Color(60, 179, 113));
-        signUpButton.setForeground(Color.WHITE);
-        signUpButton.setFocusPainted(false);
-        signUpButton.setBorderPainted(false);
-        signUpButton.setPreferredSize(new Dimension(150, 35));
-        
-        backToLoginButton.setFont(buttonFont);
-        backToLoginButton.setBackground(new Color(108, 117, 125));
-        backToLoginButton.setForeground(Color.WHITE);
-        backToLoginButton.setFocusPainted(false);
-        backToLoginButton.setBorderPainted(false);
-        backToLoginButton.setPreferredSize(new Dimension(150, 35));
-        
-        // Style fields
-        fullNameField.setFont(labelFont);
-        emailField.setFont(labelFont);
-        contactNumberField.setFont(labelFont);
-        passwordField.setFont(labelFont);
-        confirmPasswordField.setFont(labelFont);
-        occupationField.setFont(labelFont);
-        
-        // Style combo boxes
-        dayComboBox.setFont(labelFont);
-        monthComboBox.setFont(labelFont);
-        yearComboBox.setFont(labelFont);
-        genderComboBox.setFont(labelFont);
-        
-        // Style checkbox
-        termsCheckBox.setFont(labelFont);
-        termsCheckBox.setBackground(Color.WHITE);
-        
-        // Style status label
-        statusLabel.setFont(labelFont);
+    // Buttons
+    Theme.styleSuccessButton(signUpButton);
+    Theme.styleSecondaryButton(backToLoginButton);
+
+    // Fields
+    Theme.styleTextField(fullNameField);
+    Theme.styleTextField(emailField);
+    Theme.styleTextField(contactNumberField);
+    Theme.styleTextField(passwordField);
+    Theme.styleTextField(confirmPasswordField);
+    Theme.styleTextField(occupationField);
+
+    // Combo boxes and checkbox
+    Theme.styleComboBox(dayComboBox);
+    Theme.styleComboBox(monthComboBox);
+    Theme.styleComboBox(yearComboBox);
+    Theme.styleComboBox(genderComboBox);
+    Theme.styleCheckBox(termsCheckBox);
+
+    // Status label
+    statusLabel.setFont(Theme.fontPlain(13));
     }
 
     private void setupLayout() {
@@ -158,12 +145,12 @@ public class SignUpFrame extends JFrame {
         
         // Create responsive outer panel
         JPanel outerPanel = new JPanel(new BorderLayout());
-        outerPanel.setBackground(Color.WHITE);
+    outerPanel.setBackground(Theme.BG_APP);
         
         // Main panel with flexible padding
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
+    mainPanel.setBackground(Theme.BG_APP);
         
         // Dynamic padding that adjusts to window size
         int padding = 20;
@@ -172,17 +159,15 @@ public class SignUpFrame extends JFrame {
         // Title section
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
-        titlePanel.setBackground(Color.WHITE);
+    titlePanel.setBackground(Theme.BG_APP);
         
-        JLabel titleLabel = new JLabel("Create New Account");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+    JLabel titleLabel = Theme.h1("Create New Account");
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titleLabel.setForeground(new Color(60, 179, 113));
         
         JLabel subtitleLabel = new JLabel("Please fill in all required fields");
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+    subtitleLabel.setFont(Theme.fontPlain(15));
         subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        subtitleLabel.setForeground(Color.GRAY);
+    subtitleLabel.setForeground(Theme.TEXT_SECONDARY);
         
         titlePanel.add(titleLabel);
         titlePanel.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -190,17 +175,20 @@ public class SignUpFrame extends JFrame {
         
         // Create form panel with flexible sizing
         JPanel formPanel = createFormPanel();
-        formPanel.setMaximumSize(new Dimension(600, Integer.MAX_VALUE)); // Limit max width
+    formPanel.setMaximumSize(new Dimension(600, Integer.MAX_VALUE)); // Limit max width
+    // Minimal: flat, no card border
+    formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    formPanel.setBackground(Theme.BG_APP);
         
         // Button panel with flexible layout
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        buttonPanel.setBackground(Color.WHITE);
+    buttonPanel.setBackground(Theme.BG_APP);
         buttonPanel.add(signUpButton);
         buttonPanel.add(backToLoginButton);
         
         // Status panel
         JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        statusPanel.setBackground(Color.WHITE);
+    statusPanel.setBackground(Theme.BG_APP);
         statusPanel.add(statusLabel);
         
         // Add components to main panel with flexible spacing
@@ -214,20 +202,14 @@ public class SignUpFrame extends JFrame {
         mainPanel.add(statusPanel);
         mainPanel.add(Box.createVerticalGlue()); // Bottom flexible spacing
         
-        // Wrap in scroll pane for smaller screens with responsive scrolling
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder(null);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Smooth scrolling
-        
-        outerPanel.add(scrollPane, BorderLayout.CENTER);
+    // Flat modern: no scrollbars
+    outerPanel.add(mainPanel, BorderLayout.CENTER);
         add(outerPanel, BorderLayout.CENTER);
     }
 
     private JPanel createFormPanel() {
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBackground(Color.WHITE);
+    JPanel formPanel = new JPanel(new GridBagLayout());
+    formPanel.setBackground(Theme.BG_APP);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.anchor = GridBagConstraints.WEST;
@@ -259,8 +241,8 @@ public class SignUpFrame extends JFrame {
         
         gbc.gridx = 1; gbc.gridy = row;
         gbc.anchor = GridBagConstraints.WEST;
-        JPanel dobPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        dobPanel.setBackground(Color.WHITE);
+    JPanel dobPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+    dobPanel.setBackground(Theme.BG_APP);
         dobPanel.add(dayComboBox);
         dobPanel.add(monthComboBox);
         dobPanel.add(yearComboBox);
@@ -304,26 +286,38 @@ public class SignUpFrame extends JFrame {
         
         // Real-time validation as user types
         emailField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) { validateEmailField(); }
+            @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) { validateEmailField(); }
+            @Override
             public void changedUpdate(javax.swing.event.DocumentEvent e) { validateEmailField(); }
         });
         
         passwordField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) { validatePasswordField(); }
+            @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) { validatePasswordField(); }
+            @Override
             public void changedUpdate(javax.swing.event.DocumentEvent e) { validatePasswordField(); }
         });
         
         confirmPasswordField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) { validatePasswordConfirmation(); }
+            @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) { validatePasswordConfirmation(); }
+            @Override
             public void changedUpdate(javax.swing.event.DocumentEvent e) { validatePasswordConfirmation(); }
         });
         
         contactNumberField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) { validateContactField(); }
+            @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) { validateContactField(); }
+            @Override
             public void changedUpdate(javax.swing.event.DocumentEvent e) { validateContactField(); }
         });
     }
@@ -333,13 +327,9 @@ public class SignUpFrame extends JFrame {
         if (!email.isEmpty()) {
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 showStatus("Invalid email format", Color.RED);
-                emailField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else {
-                showStatus("Valid email format", Color.GREEN);
-                emailField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
+                showStatus(" ", Color.GRAY);
             }
-        } else {
-            emailField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         }
     }
     
@@ -348,16 +338,11 @@ public class SignUpFrame extends JFrame {
         if (!password.isEmpty()) {
             if (password.length() < 6) {
                 showStatus("Password too short (minimum 6 characters)", Color.RED);
-                passwordField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else if (!password.matches(".*[a-zA-Z].*")) {
                 showStatus("Password must contain at least one letter", Color.RED);
-                passwordField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else {
-                showStatus("Password strength good", Color.GREEN);
-                passwordField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
+                showStatus(" ", Color.GRAY);
             }
-        } else {
-            passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         }
     }
     
@@ -367,13 +352,9 @@ public class SignUpFrame extends JFrame {
         if (!confirmPassword.isEmpty()) {
             if (!password.equals(confirmPassword)) {
                 showStatus("Passwords do not match", Color.RED);
-                confirmPasswordField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else if (!password.isEmpty()) {
-                showStatus("Passwords match", Color.GREEN);
-                confirmPasswordField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
+                showStatus(" ", Color.GRAY);
             }
-        } else {
-            confirmPasswordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         }
     }
     
@@ -382,13 +363,9 @@ public class SignUpFrame extends JFrame {
         if (!contact.isEmpty()) {
             if (!contact.matches("^[0-9]{9,15}$")) {
                 showStatus("Contact number must be 9-15 digits only", Color.RED);
-                contactNumberField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else {
-                showStatus("Valid contact number", Color.GREEN);
-                contactNumberField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
+                showStatus(" ", Color.GRAY);
             }
-        } else {
-            contactNumberField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         }
     }
 
@@ -398,10 +375,10 @@ public class SignUpFrame extends JFrame {
         setResizable(true);
         
         // Set initial size and responsive dimensions
-        setSize(600, 700);
-        setMinimumSize(new Dimension(500, 600));
-        setMaximumSize(new Dimension(800, 900));
-        setLocationRelativeTo(parentFrame);
+    setSize(900, 720);
+    setMinimumSize(new Dimension(640, 560));
+    setLocationRelativeTo(parentFrame);
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         // Add component listener for responsive behavior
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -420,6 +397,9 @@ public class SignUpFrame extends JFrame {
                 goBackToLogin();
             }
         });
+
+    // Set app icon
+    try { setIconImage(com.eventms.view.ui.Theme.getAppIcon()); } catch (Exception ignore) {}
     }
 
     private void performSignUp() {
@@ -454,10 +434,9 @@ public class SignUpFrame extends JFrame {
                     showStatus("Account created successfully!", Color.GREEN);
                     
                     // Show success message and redirect to login
-                    JOptionPane.showMessageDialog(
-                        this,
-                        "Your account has been created successfully!\n" +
-                        "You can now log in with your email and password.",
+                    JOptionPane.showMessageDialog(this, """
+                                                        Your account has been created successfully!\n
+                                                        You can now log in with your email and password.""",
                         "Registration Successful",
                         JOptionPane.INFORMATION_MESSAGE
                     );
@@ -471,7 +450,7 @@ public class SignUpFrame extends JFrame {
                 }
             } catch (IllegalArgumentException ex) {
                 showStatus("Registration failed: " + ex.getMessage(), Color.RED);
-            } catch (Exception ex) {
+            } catch (HeadlessException ex) {
                 showStatus("An unexpected error occurred. Please try again.", Color.RED);
             } finally {
                 signUpButton.setEnabled(true);
@@ -592,11 +571,11 @@ public class SignUpFrame extends JFrame {
 
     private char getSelectedGender() {
         String selectedGender = (String) genderComboBox.getSelectedItem();
-        switch (selectedGender) {
-            case "Male": return 'M';
-            case "Female": return 'F';
-            default: return 'O'; // Other
-        }
+        return switch (selectedGender) {
+            case "Male" -> 'M';
+            case "Female" -> 'F';
+            default -> 'O';
+        }; // Other
     }
 
     private void goBackToLogin() {

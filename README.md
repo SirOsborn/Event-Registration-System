@@ -65,7 +65,7 @@ Event-ms/
 ├── build/              <-- Compiled classes (auto-generated)
 │   └── classes/
 │       └── com/eventms/
-│           ├── Main.class
+│           ├── Launcher.class
 │           ├── model/      <-- All model .class files
 │           └── service/    <-- All service .class files
 └── src/                <-- Source code
@@ -73,7 +73,7 @@ Event-ms/
     │   └── eventms_db.sql
     └── main/java/
         └── com/eventms/
-            ├── Main.java
+            ├── Launcher.java
             ├── model/
             │   ├── Admin.java
             │   ├── Event.java
@@ -132,22 +132,19 @@ Event-ms/
    # Compile all classes
    javac -d "build/classes" -cp "src/main/java" src/main/java/com/eventms/model/*.java
    javac -d "build/classes" -cp "build/classes;src/main/java" src/main/java/com/eventms/service/*.java
-   javac -d "build/classes" -cp "build/classes" src/main/java/com/eventms/Main.java
+   javac -d "build/classes" -cp "build/classes" src/main/java/com/eventms/Launcher.java
    ```
 
 2. **Run the application**:
    ```bash
-   # Console demo version
-   java -cp "build/classes" com.eventms.Main
-   
    # GUI version
-   java -cp "build/classes" com.eventms.Main --gui
+   java -cp "build/classes" com.eventms.Launcher
    ```
 
 ### Running from an IDE
 
 1. Open the project folder in your IDE
-2. Locate `src/main/java/com/eventms/Main.java`
+2. Locate `src/main/java/com/eventms/Launcher.java`
 3. Click the **Run** button - the IDE handles compilation automatically
 
 ---
@@ -200,16 +197,16 @@ Event-ms/
 
 ### Demo Capabilities
 The system includes a comprehensive demo that showcases:
-- ✅ User creation and verification
-- ✅ Secure login with password hashing
-- ✅ Role-based user promotion (USER → ADMIN)
-- ✅ Admin-only token generation
-- ✅ Token-based event creation
-- ✅ Authenticated event registration
-- ✅ Password change and reset functionality
-- ✅ Token reusability for multiple events
-- ✅ Secure logout and session management
-- ✅ Authorization checks for all operations
+- User creation and verification
+- Secure login with password hashing
+- Role-based user promotion (USER to ADMIN)
+- Admin-only token generation
+- Token-based event creation
+- Authenticated event registration
+- Password change and reset functionality
+- Token reusability for multiple events
+- Secure logout and session management
+- Authorization checks for all operations
 
 ---
 

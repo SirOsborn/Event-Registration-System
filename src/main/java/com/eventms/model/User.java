@@ -48,8 +48,8 @@ public class User implements Displayable {
         }
         this.email = email.toLowerCase();
         
-        if (contactNumber == null || !contactNumber.matches("\\d{10,15}")) {
-            throw new IllegalArgumentException("Contact number must be 10-15 digits");
+        if (contactNumber == null || !contactNumber.matches("\\d{9,15}")) {
+            throw new IllegalArgumentException("Contact number must be 9-15 digits");
         }
         this.contactNumber = contactNumber;
         
@@ -82,10 +82,12 @@ public class User implements Displayable {
     public int getUserId() { return userId; }
     public String getFullName() { return fullName; }
     public String getEmail() {
-        return isVerified ? email : "Email hidden - User not verified";
+        return email;
     }
+    // Raw email for persistence and internal logic (unmasked)
+    public String getEmailRaw() { return email; }
     public String getContactNumber() {
-        return isVerified ? contactNumber : "Contact hidden - User not verified";
+        return contactNumber;
     }
     public String getPassword() { return password; }
     public String getDob() { return dob; }
@@ -111,8 +113,8 @@ public class User implements Displayable {
     }
 
     public void setContactNumber(String contactNumber) {
-        if (contactNumber == null || !contactNumber.matches("\\d{10,15}")) {
-            throw new IllegalArgumentException("Contact number must be 10-15 digits");
+        if (contactNumber == null || !contactNumber.matches("\\d{9,15}")) {
+            throw new IllegalArgumentException("Contact number must be 9-15 digits");
         }
         this.contactNumber = contactNumber;
     }

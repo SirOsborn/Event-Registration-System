@@ -2,17 +2,17 @@ package com.eventms.view;
 
 import com.eventms.model.User;
 import com.eventms.service.UserService;
-
-import javax.swing.*;
+import com.eventms.view.ui.Theme;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
 
 /**
  * Login GUI window for the Event Management System
  * Provides user authentication interface with email and password fields
  */
 public class LoginFrame extends JFrame {
+    @SuppressWarnings("FieldMayBeFinal")
     private UserService userService;
     private JTextField emailField;
     private JPasswordField passwordField;
@@ -31,6 +31,8 @@ public class LoginFrame extends JFrame {
     }
 
     private void initializeComponents() {
+    // Install theme once per app instance (idempotent)
+    Theme.install();
         // Create input fields
         emailField = new JTextField(20);
         passwordField = new JPasswordField(20);
@@ -52,42 +54,23 @@ public class LoginFrame extends JFrame {
         statusLabel = new JLabel(" ");
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         
-        // Style components
-        styleComponents();
+    // Style components
+    styleComponents();
     }
 
     private void styleComponents() {
-        // Set fonts
-        Font titleFont = new Font("Arial", Font.BOLD, 24);
-        Font labelFont = new Font("Arial", Font.PLAIN, 14);
-        Font buttonFont = new Font("Arial", Font.BOLD, 14);
-        
-        // Style buttons
-        loginButton.setFont(buttonFont);
-        loginButton.setBackground(new Color(70, 130, 180));
-        loginButton.setForeground(Color.WHITE);
-        loginButton.setFocusPainted(false);
-        loginButton.setBorderPainted(false);
-        loginButton.setPreferredSize(new Dimension(120, 35));
-        
-        signUpButton.setFont(buttonFont);
-        signUpButton.setBackground(new Color(60, 179, 113));
-        signUpButton.setForeground(Color.WHITE);
-        signUpButton.setFocusPainted(false);
-        signUpButton.setBorderPainted(false);
-        signUpButton.setPreferredSize(new Dimension(120, 35));
-        
-        forgotPasswordButton.setFont(new Font("Arial", Font.PLAIN, 12));
-        forgotPasswordButton.setForeground(new Color(70, 130, 180));
-        forgotPasswordButton.setBorderPainted(false);
-        forgotPasswordButton.setContentAreaFilled(false);
-        
-        // Style fields
-        emailField.setFont(labelFont);
-        passwordField.setFont(labelFont);
-        
-        // Style status label
-        statusLabel.setFont(labelFont);
+    // Buttons
+    Theme.stylePrimaryButton(loginButton);
+    Theme.styleSuccessButton(signUpButton);
+    Theme.styleLinkButton(forgotPasswordButton);
+
+    // Fields
+    Theme.styleTextField(emailField);
+    Theme.styleTextField(passwordField);
+
+    // Status label
+    statusLabel.setFont(Theme.fontPlain(13));
+    statusLabel.setForeground(Theme.TEXT_SECONDARY);
     }
 
     private void setupLayout() {
@@ -95,31 +78,29 @@ public class LoginFrame extends JFrame {
         
         // Create a responsive main panel that adapts to window size
         JPanel outerPanel = new JPanel(new BorderLayout());
-        outerPanel.setBackground(Color.WHITE);
+    outerPanel.setBackground(Theme.BG_APP);
         
         // Main panel with flexible padding
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
+    mainPanel.setBackground(Theme.BG_APP);
         
         // Dynamic padding that adjusts to window size
         int padding = 30;
         mainPanel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
         
         // Title section
-        JPanel titlePanel = new JPanel();
-        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
-        titlePanel.setBackground(Color.WHITE);
+    JPanel titlePanel = new JPanel();
+    titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+    titlePanel.setBackground(Theme.BG_APP);
         
-        JLabel titleLabel = new JLabel("Event Management System");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+    JLabel titleLabel = Theme.h1("Event Management System");
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titleLabel.setForeground(new Color(70, 130, 180));
         
         JLabel subtitleLabel = new JLabel("Please login to continue");
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+    subtitleLabel.setFont(Theme.fontPlain(15));
         subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        subtitleLabel.setForeground(Color.GRAY);
+    subtitleLabel.setForeground(Theme.TEXT_SECONDARY);
         
         titlePanel.add(titleLabel);
         titlePanel.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -127,7 +108,9 @@ public class LoginFrame extends JFrame {
         
         // Form panel with flexible sizing
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBackground(Color.WHITE);
+    // Minimal look: flat, no card border
+    formPanel.setBackground(Theme.BG_APP);
+    formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         formPanel.setMaximumSize(new Dimension(600, 150)); // Limit maximum form size
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -160,18 +143,18 @@ public class LoginFrame extends JFrame {
         
         // Button panel with flexible layout
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        buttonPanel.setBackground(Color.WHITE);
+    buttonPanel.setBackground(Theme.BG_APP);
         buttonPanel.add(loginButton);
         buttonPanel.add(signUpButton);
         
         // Forgot password panel
         JPanel forgotPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        forgotPanel.setBackground(Color.WHITE);
+    forgotPanel.setBackground(Theme.BG_APP);
         forgotPanel.add(forgotPasswordButton);
         
         // Status panel with flexible sizing
         JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        statusPanel.setBackground(Color.WHITE);
+    statusPanel.setBackground(Theme.BG_APP);
         statusPanel.add(statusLabel);
         
         // Add components to main panel with flexible spacing
@@ -193,55 +176,46 @@ public class LoginFrame extends JFrame {
 
     private void setupEventHandlers() {
         // Login button action
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performLogin();
-            }
+        loginButton.addActionListener((ActionEvent e) -> {
+            performLogin();
         });
         
         // Sign up button action
-        signUpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openSignUpWindow();
-            }
+        signUpButton.addActionListener((ActionEvent e) -> {
+            openSignUpWindow();
         });
         
         // Forgot password button action
-        forgotPasswordButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleForgotPassword();
-            }
+        forgotPasswordButton.addActionListener((ActionEvent e) -> {
+            handleForgotPassword();
         });
         
         // Enter key on password field
-        passwordField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performLogin();
-            }
+        passwordField.addActionListener((ActionEvent e) -> {
+            performLogin();
         });
         
         // Enter key on email field
-        emailField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                passwordField.requestFocus();
-            }
+        emailField.addActionListener((ActionEvent e) -> {
+            passwordField.requestFocus();
         });
         
         // Real-time validation as user types
         emailField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) { validateLoginInput(); }
+            @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) { validateLoginInput(); }
+            @Override
             public void changedUpdate(javax.swing.event.DocumentEvent e) { validateLoginInput(); }
         });
         
         passwordField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) { validateLoginInput(); }
+            @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) { validateLoginInput(); }
+            @Override
             public void changedUpdate(javax.swing.event.DocumentEvent e) { validateLoginInput(); }
         });
     }
@@ -254,27 +228,7 @@ public class LoginFrame extends JFrame {
         boolean isEmailEmpty = email.isEmpty() || email.equals("Enter your email address");
         boolean isPasswordEmpty = password.isEmpty() || password.equals("Enter your password");
         
-        // Validate email field
-        if (!isEmailEmpty) {
-            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-                emailField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-            } else {
-                emailField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
-            }
-        } else {
-            emailField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-        }
-        
-        // Validate password field
-        if (!isPasswordEmpty) {
-            if (password.length() < 6) {
-                passwordField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-            } else {
-                passwordField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
-            }
-        } else {
-            passwordField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-        }
+    // Minimal validation UI: no border color changes, only status text
         
         // Clear status if both fields have content and are valid
         if (!isEmailEmpty && !isPasswordEmpty) {
@@ -289,10 +243,11 @@ public class LoginFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(true); // Allow resizing
         
-        // Set initial size and minimum size
-        setSize(450, 350);
-        setMinimumSize(new Dimension(400, 300));
-        setLocationRelativeTo(null); // Center the window
+    // Start maximized to fill screen and avoid cramped layout
+    setSize(900, 700);
+    setMinimumSize(new Dimension(640, 480));
+    setLocationRelativeTo(null); // Center before maximize
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         // Add component listener for responsive behavior
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -304,12 +259,8 @@ public class LoginFrame extends JFrame {
             }
         });
         
-        // Set icon (you can replace this with your own icon)
-        try {
-            setIconImage(Toolkit.getDefaultToolkit().createImage("src/main/resources/icon.png"));
-        } catch (Exception e) {
-            // Icon not found, continue without it
-        }
+    // Set app icon
+    try { setIconImage(com.eventms.view.ui.Theme.getAppIcon()); } catch (Exception ignore) {}
     }
 
     private void performLogin() {
@@ -361,9 +312,7 @@ public class LoginFrame extends JFrame {
                     showStatus("Login successful! Welcome, " + currentUser.getFullName(), Color.GREEN);
                     
                     // Wait a moment to show success message
-                    Timer timer = new Timer(1500, e -> {
-                        openMainApplication(currentUser, currentSessionId);
-                    });
+                    Timer timer = new Timer(1500, e -> openMainApplication(currentUser));
                     timer.setRepeats(false);
                     timer.start();
                 } else {
@@ -400,8 +349,9 @@ public class LoginFrame extends JFrame {
             if (resetToken != null) {
                 JOptionPane.showMessageDialog(
                     this,
-                    "Password reset instructions have been sent to your email.\n" +
-                    "Reset Token: " + resetToken + "\n" +
+                    """
+                    Password reset instructions have been sent to your email.
+                    Reset Token: """ + resetToken + "\n" +
                     "(In a real application, this would be sent via email)",
                     "Password Reset",
                     JOptionPane.INFORMATION_MESSAGE
@@ -417,11 +367,11 @@ public class LoginFrame extends JFrame {
         }
     }
 
-    private void openMainApplication(User user, String sessionId) {
+    private void openMainApplication(User user) {
         // Create and show the main application window
         // For now, we'll pass null for EventService and RegistrationService
         // These can be initialized properly later when those services are needed
-        MainApplicationFrame mainFrame = new MainApplicationFrame(user, userService, null, null);
+    MainApplicationFrame mainFrame = new MainApplicationFrame(user, userService, null, null);
         mainFrame.setVisible(true);
         this.dispose();
     }

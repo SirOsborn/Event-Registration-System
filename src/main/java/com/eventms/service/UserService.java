@@ -1,8 +1,10 @@
-
 package com.eventms.service;
 
+import com.eventms.database.Database;
+import com.eventms.database.UserDao;
 import com.eventms.model.Event;
 import com.eventms.model.User;
+import com.eventms.security.PasswordHasher;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -15,10 +17,27 @@ public class UserService {
     private final HashMap<String, User> loggedInUsers = new HashMap<>(); // sessionId -> User
     private final HashMap<String, Integer> emailToUserId = new HashMap<>(); // email -> userId for login
     private int nextUserId = 1;
+    private final boolean dbEnabled = Boolean.parseBoolean(Database.getConfig("DB_ON", "false")) && Database.isConfigured();
+    private final UserDao userDao = new UserDao();
 
     // Creates a new user. All new users default to the USER role and are not verified
     // Passwords are automatically hashed for security
     public User createUser(String fullName, String email, String contactNumber, String password, String language, String occupation, String dob, char gender) {
+        if (dbEnabled) {
+            // Use existing hashing to keep behavior consistent
+            String hashedPassword = hashPassword(password);
+            User newUser = new User(nextUserId, fullName, email, contactNumber, hashedPassword, occupation, dob, gender);
+            // Try to persist to DB; if success, use generated ID, else fallback to memory
+            int newId = userDao.insert(newUser, hashedPassword);
+            if (newId > 0) {
+                newUser.setUserId(newId);
+            }
+            users.put(newUser.getUserId(), newUser);
+            emailToUserId.put(email.toLowerCase(), newUser.getUserId());
+            nextUserId = Math.max(nextUserId, newUser.getUserId() + 1);
+            return newUser;
+        }
+        
         // Check if email already exists
         if (emailToUserId.containsKey(email.toLowerCase())) {
             throw new IllegalArgumentException("User with this email already exists");
@@ -78,6 +97,34 @@ public class UserService {
     // Authenticates a user with email and password
     // Returns a session ID if successful, null if authentication fails
     public String login(String email, String password) {
+        if (dbEnabled) {
+            // If not present in memory, try DB lookup
+            Integer userId = emailToUserId.get(email.toLowerCase());
+            User user;
+            if (userId != null) {
+                user = users.get(userId);
+            } else {
+                user = userDao.findByEmail(email.toLowerCase());
+                if (user != null) {
+                    // bring into memory map with a temporary id if needed
+                    int id = user.getUserId();
+                    users.put(id, user);
+                    emailToUserId.put(email.toLowerCase(), id);
+                    nextUserId = Math.max(nextUserId, id + 1);
+                }
+            }
+            if (user == null) {
+                System.out.println("Login failed: User not found with email: " + email);
+                return null;
+            }
+            if (!verifyPassword(password, user.getPassword())) {
+                System.out.println("Login failed: Invalid password for user: " + email);
+                return null;
+            }
+            String sessionId = generateSessionId();
+            loggedInUsers.put(sessionId, user);
+            return sessionId;
+        }
         if (email == null || password == null) {
             System.out.println("Login failed: Email and password cannot be null");
             return null;
@@ -196,30 +243,47 @@ public class UserService {
 
     // ================== HELPER METHODS ==================
 
-    // Hashes a password using SHA-256
+    // Hashes a password (PBKDF2). Falls back to SHA-256 only if PBKDF2 fails.
     private String hashPassword(String password) {
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(password.getBytes());
-            StringBuilder hexString = new StringBuilder();
-            
-            for (byte b : hashBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
+            return PasswordHasher.hash(password);
+        } catch (RuntimeException e) {
+            // Fallback legacy SHA-256
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                byte[] hashBytes = digest.digest(password.getBytes());
+                StringBuilder hexString = new StringBuilder();
+                for (byte b : hashBytes) {
+                    String hex = Integer.toHexString(0xff & b);
+                    if (hex.length() == 1) hexString.append('0');
+                    hexString.append(hex);
                 }
-                hexString.append(hex);
+                return hexString.toString();
+            } catch (NoSuchAlgorithmException ex) {
+                throw new RuntimeException("No password hashing available", ex);
             }
-            
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("SHA-256 algorithm not available", e);
         }
     }
 
-    // Verifies a plain text password against a hashed password
+    // Verifies a plain text password against a hashed password (supports PBKDF2 and legacy SHA-256 hex)
     private boolean verifyPassword(String plainPassword, String hashedPassword) {
-        return hashPassword(plainPassword).equals(hashedPassword);
+        if (hashedPassword != null && hashedPassword.startsWith("pbkdf2$")) {
+            return PasswordHasher.verify(plainPassword, hashedPassword);
+        }
+        // legacy SHA-256 comparison
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(plainPassword.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString().equals(hashedPassword);
+        } catch (NoSuchAlgorithmException e) {
+            return false;
+        }
     }
 
     // Generates a unique session ID

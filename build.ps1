@@ -15,9 +15,9 @@ Write-Host "Cleaned previous build" -ForegroundColor Yellow
 Write-Host "Compiling model classes..." -ForegroundColor Cyan
 javac -d "build/classes" -cp "src/main/java" src/main/java/com/eventms/model/*.java
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "✓ Model classes compiled successfully" -ForegroundColor Green
+    Write-Host "Model classes compiled successfully" -ForegroundColor Green
 } else {
-    Write-Host "✗ Model compilation failed" -ForegroundColor Red
+    Write-Host "Model compilation failed" -ForegroundColor Red
     exit 1
 }
 
@@ -25,31 +25,40 @@ if ($LASTEXITCODE -eq 0) {
 Write-Host "Compiling service classes..." -ForegroundColor Cyan
 javac -d "build/classes" -cp "build/classes;src/main/java" src/main/java/com/eventms/service/*.java
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "✓ Service classes compiled successfully" -ForegroundColor Green
+    Write-Host "Service classes compiled successfully" -ForegroundColor Green
 } else {
-    Write-Host "✗ Service compilation failed" -ForegroundColor Red
+    Write-Host "Service compilation failed" -ForegroundColor Red
     exit 1
 }
 
 # Compile view classes (GUI components)
 Write-Host "Compiling view classes..." -ForegroundColor Cyan
 javac -d "build/classes" -cp "build/classes;src/main/java" src/main/java/com/eventms/view/*.java
+# Compile database classes (optional JDBC helpers)
+Write-Host "Compiling database classes..." -ForegroundColor Cyan
+javac -d "build/classes" -cp "build/classes;src/main/java;lib/*" src/main/java/com/eventms/database/*.java 2>$null
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "✓ View classes compiled successfully" -ForegroundColor Green
+    Write-Host "Database classes compiled successfully" -ForegroundColor Green
 } else {
-    Write-Host "✗ View compilation failed" -ForegroundColor Red
+    Write-Host "Warning: Database classes compilation had issues (JDBC driver may be missing). Continuing..." -ForegroundColor Yellow
+}
+
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "View classes compiled successfully" -ForegroundColor Green
+} else {
+    Write-Host "View compilation failed" -ForegroundColor Red
     exit 1
 }
 
-# Compile main class
-Write-Host "Compiling main class..." -ForegroundColor Cyan
-javac -d "build/classes" -cp "build/classes" src/main/java/com/eventms/Main.java
+# Compile launcher class
+Write-Host "Compiling launcher..." -ForegroundColor Cyan
+javac -d "build/classes" -cp "build/classes" src/main/java/com/eventms/Launcher.java
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "✓ Main class compiled successfully" -ForegroundColor Green
+    Write-Host "Launcher compiled successfully" -ForegroundColor Green
 } else {
-    Write-Host "✗ Main compilation failed" -ForegroundColor Red
+    Write-Host "Launcher compilation failed" -ForegroundColor Red
     exit 1
 }
 
 Write-Host "Build completed successfully!" -ForegroundColor Green
-Write-Host "Run with: java -cp 'build/classes' com.eventms.Main" -ForegroundColor Yellow
+Write-Host "Run with: java -cp 'build/classes;lib/*' com.eventms.Launcher" -ForegroundColor Yellow
