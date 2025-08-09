@@ -35,6 +35,10 @@ public class LoginFrame extends JFrame {
         emailField = new JTextField(20);
         passwordField = new JPasswordField(20);
         
+        // Add placeholder text
+        addPlaceholder(emailField, "Enter your email address");
+        addPlaceholder(passwordField, "Enter your password");
+        
         // Add helpful tooltips
         emailField.setToolTipText("Enter your registered email address");
         passwordField.setToolTipText("Enter your password (minimum 6 characters)");
@@ -124,7 +128,7 @@ public class LoginFrame extends JFrame {
         // Form panel with flexible sizing
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(Color.WHITE);
-        formPanel.setMaximumSize(new Dimension(400, 150)); // Limit maximum form size
+        formPanel.setMaximumSize(new Dimension(600, 150)); // Limit maximum form size
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -246,8 +250,12 @@ public class LoginFrame extends JFrame {
         String email = emailField.getText().trim();
         String password = new String(passwordField.getPassword());
         
+        // Check if email is placeholder text
+        boolean isEmailEmpty = email.isEmpty() || email.equals("Enter your email address");
+        boolean isPasswordEmpty = password.isEmpty() || password.equals("Enter your password");
+        
         // Validate email field
-        if (!email.isEmpty()) {
+        if (!isEmailEmpty) {
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 emailField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else {
@@ -258,7 +266,7 @@ public class LoginFrame extends JFrame {
         }
         
         // Validate password field
-        if (!password.isEmpty()) {
+        if (!isPasswordEmpty) {
             if (password.length() < 6) {
                 passwordField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             } else {
@@ -269,7 +277,7 @@ public class LoginFrame extends JFrame {
         }
         
         // Clear status if both fields have content and are valid
-        if (!email.isEmpty() && !password.isEmpty()) {
+        if (!isEmailEmpty && !isPasswordEmpty) {
             if (email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$") && password.length() >= 6) {
                 statusLabel.setText(" "); // Clear any error messages
             }
@@ -298,7 +306,7 @@ public class LoginFrame extends JFrame {
         
         // Set icon (you can replace this with your own icon)
         try {
-            setIconImage(Toolkit.getDefaultToolkit().createImage("icon.png"));
+            setIconImage(Toolkit.getDefaultToolkit().createImage("src/main/resources/icon.png"));
         } catch (Exception e) {
             // Icon not found, continue without it
         }
@@ -308,8 +316,12 @@ public class LoginFrame extends JFrame {
         String email = emailField.getText().trim();
         String password = new String(passwordField.getPassword());
         
+        // Check if fields contain placeholder text
+        boolean isEmailEmpty = email.isEmpty() || email.equals("Enter your email address");
+        boolean isPasswordEmpty = password.isEmpty() || password.equals("Enter your password");
+        
         // Enhanced input validation with specific error messages
-        if (email.isEmpty()) {
+        if (isEmailEmpty) {
             showStatus("Please enter your email address", Color.RED);
             emailField.requestFocus();
             return;
@@ -322,7 +334,7 @@ public class LoginFrame extends JFrame {
             return;
         }
         
-        if (password.isEmpty()) {
+        if (isPasswordEmpty) {
             showStatus("Please enter your password", Color.RED);
             passwordField.requestFocus();
             return;
@@ -431,6 +443,62 @@ public class LoginFrame extends JFrame {
     public void showLoginSuccess(String userEmail) {
         emailField.setText(userEmail);
         showStatus("Account created successfully! Please login.", Color.GREEN);
+    }
+
+    /**
+     * Adds placeholder text to a text field that appears when empty and disappears when focused
+     */
+    private void addPlaceholder(JTextField textField, String placeholder) {
+        textField.setText(placeholder);
+        textField.setForeground(Color.GRAY);
+        
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(Color.BLACK);
+                }
+            }
+            
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(Color.GRAY);
+                }
+            }
+        });
+    }
+    
+    /**
+     * Adds placeholder text to a password field
+     */
+    private void addPlaceholder(JPasswordField passwordField, String placeholder) {
+        passwordField.setText(placeholder);
+        passwordField.setForeground(Color.GRAY);
+        passwordField.setEchoChar((char) 0); // Show placeholder text clearly
+        
+        passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                String currentText = new String(passwordField.getPassword());
+                if (currentText.equals(placeholder)) {
+                    passwordField.setText("");
+                    passwordField.setForeground(Color.BLACK);
+                    passwordField.setEchoChar('*'); // Enable password masking
+                }
+            }
+            
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (passwordField.getPassword().length == 0) {
+                    passwordField.setText(placeholder);
+                    passwordField.setForeground(Color.GRAY);
+                    passwordField.setEchoChar((char) 0); // Show placeholder text
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {

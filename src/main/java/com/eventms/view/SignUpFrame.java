@@ -58,6 +58,14 @@ public class SignUpFrame extends JFrame {
         confirmPasswordField.setToolTipText("Re-enter your password to confirm");
         occupationField.setToolTipText("Enter your occupation (letters and spaces only, 2-30 characters)");
         
+        // Add placeholder text to input fields
+        addPlaceholder(fullNameField, "Enter your full name");
+        addPlaceholder(emailField, "Enter your email address");
+        addPlaceholder(contactNumberField, "Enter your phone number");
+        addPlaceholder(passwordField, "Enter your password");
+        addPlaceholder(confirmPasswordField, "Confirm your password");
+        addPlaceholder(occupationField, "Enter your occupation");
+        
         // Create date of birth components
         dayComboBox = new JComboBox<>();
         monthComboBox = new JComboBox<>();
@@ -474,44 +482,48 @@ public class SignUpFrame extends JFrame {
 
     private String validateForm() {
         // Check required fields with enhanced error messages
-        if (fullNameField.getText().trim().isEmpty()) {
+        String fullName = fullNameField.getText().trim();
+        boolean isFullNameEmpty = fullName.isEmpty() || fullName.equals("Enter your full name");
+        if (isFullNameEmpty) {
             fullNameField.requestFocus();
             return "Please enter your full name";
         }
         
         // Validate full name format (only letters and spaces)
-        String fullName = fullNameField.getText().trim();
         if (!fullName.matches("^[a-zA-Z\\s]{2,50}$")) {
             fullNameField.requestFocus();
             return "Full name should contain only letters and spaces (2-50 characters)";
         }
         
-        if (emailField.getText().trim().isEmpty()) {
+        String email = emailField.getText().trim();
+        boolean isEmailEmpty = email.isEmpty() || email.equals("Enter your email address");
+        if (isEmailEmpty) {
             emailField.requestFocus();
             return "Please enter your email address";
         }
         
         // Enhanced email format validation
-        String email = emailField.getText().trim();
         if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             emailField.requestFocus();
             return "Please enter a valid email address (e.g., user@example.com)";
         }
         
-        if (contactNumberField.getText().trim().isEmpty()) {
+        String contact = contactNumberField.getText().trim();
+        boolean isContactEmpty = contact.isEmpty() || contact.equals("Enter your phone number");
+        if (isContactEmpty) {
             contactNumberField.requestFocus();
             return "Please enter your contact number";
         }
         
         // Enhanced contact number validation
-        String contact = contactNumberField.getText().trim();
         if (!contact.matches("^[0-9]{9,15}$")) {
             contactNumberField.requestFocus();
             return "Contact number must be 9-15 digits only (no spaces or special characters)";
         }
         
         String password = new String(passwordField.getPassword());
-        if (password.isEmpty()) {
+        boolean isPasswordEmpty = password.isEmpty() || password.equals("Enter your password");
+        if (isPasswordEmpty) {
             passwordField.requestFocus();
             return "Please enter a password";
         }
@@ -528,18 +540,20 @@ public class SignUpFrame extends JFrame {
         }
         
         String confirmPassword = new String(confirmPasswordField.getPassword());
-        if (!password.equals(confirmPassword)) {
+        boolean isConfirmEmpty = confirmPassword.isEmpty() || confirmPassword.equals("Confirm your password");
+        if (isConfirmEmpty || !password.equals(confirmPassword)) {
             confirmPasswordField.requestFocus();
             return "Passwords do not match - please check and try again";
         }
         
-        if (occupationField.getText().trim().isEmpty()) {
+        String occupation = occupationField.getText().trim();
+        boolean isOccupationEmpty = occupation.isEmpty() || occupation.equals("Enter your occupation");
+        if (isOccupationEmpty) {
             occupationField.requestFocus();
             return "Please enter your occupation";
         }
         
         // Validate occupation format
-        String occupation = occupationField.getText().trim();
         if (!occupation.matches("^[a-zA-Z\\s]{2,30}$")) {
             occupationField.requestFocus();
             return "Occupation should contain only letters and spaces (2-30 characters)";
@@ -612,5 +626,61 @@ public class SignUpFrame extends JFrame {
             statusLabel.setFont(new Font("Arial", Font.PLAIN, 14));
             statusLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         }
+    }
+
+    /**
+     * Adds placeholder text to a text field that appears when empty and disappears when focused
+     */
+    private void addPlaceholder(JTextField textField, String placeholder) {
+        textField.setText(placeholder);
+        textField.setForeground(Color.GRAY);
+        
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(Color.BLACK);
+                }
+            }
+            
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(Color.GRAY);
+                }
+            }
+        });
+    }
+    
+    /**
+     * Adds placeholder text to a password field
+     */
+    private void addPlaceholder(JPasswordField passwordField, String placeholder) {
+        passwordField.setText(placeholder);
+        passwordField.setForeground(Color.GRAY);
+        passwordField.setEchoChar((char) 0); // Show placeholder text clearly
+        
+        passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                String currentText = new String(passwordField.getPassword());
+                if (currentText.equals(placeholder)) {
+                    passwordField.setText("");
+                    passwordField.setForeground(Color.BLACK);
+                    passwordField.setEchoChar('*'); // Enable password masking
+                }
+            }
+            
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (passwordField.getPassword().length == 0) {
+                    passwordField.setText(placeholder);
+                    passwordField.setForeground(Color.GRAY);
+                    passwordField.setEchoChar((char) 0); // Show placeholder text
+                }
+            }
+        });
     }
 }
