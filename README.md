@@ -1,79 +1,281 @@
 # Event Management System
 
-**Version 1.0**
+**Version 2.0 - OOP Inheritance Authentication**
 
 ## Project Description
 
-This project is a role-based **Event Management System** developed in Java. It serves as a platform for organizers to create and manage events, and for guests to discover and register for them. The system supports functionalities like event categorization, waiting lists for full events, attendance tracking, and automated email notifications.
+This project is a **comprehensive Event Management System** developed in Java with a focus on **Object-Oriented Programming inheritance** and **role-based authentication**. The system serves as a secure platform for administrators to manage events and users to register for them. 
 
-This system is being developed as a class project, focusing on applying Object-Oriented Programming (OOP) principles and clean software architecture.
+**Key Features:**
+- **OOP Inheritance Authentication** - All services inherit authentication capabilities from a base `AuthService` class
+- **Role-based Access Control** - Admin and User roles with different privileges
+- **Token-based Event Creation** - Secure token system for event management
+- **Password Management** - Secure hashing, password changes, and reset functionality
+- **Session Management** - Comprehensive login/logout system
+- **GUI Interface** - Java Swing-based graphical user interface with login and signup forms
+- **Clean Build System** - Separate compilation with automated build scripts
+
+This system demonstrates advanced OOP concepts and secure authentication patterns.
 
 ---
 
-## Team Members
+## System Architecture
 
-* [Sun Heng] - Role : TBC
-* [Veat Bunchhour] - Role : TBC
-* [Cheav Vichar] - Role : TBC
-* [Kheang Rachana] - Role : TBC
-* [Mean Sambathpoty] - Role : TBC
+### OOP Inheritance Pattern
+The system uses **pure inheritance** for authentication, eliminating separate authentication service classes:
+
+- **`AuthService`** - Abstract base class providing authentication capabilities
+- **`AdminService`** - Extends AuthService for admin operations (token generation)
+- **`EventService`** - Extends AuthService for event management
+- **`RegistrationService`** - Extends AuthService for user registrations
+- **`UserService`** - Provides authentication without inheritance (prevents circular dependency)
+
+### Authentication Features
+- **Secure Password Hashing** - SHA-256 with salt
+- **Session Management** - Login/logout with session tracking
+- **Role-based Authorization** - Admin vs User privileges
+- **Token-based Operations** - Secure event creation tokens
+- **Password Recovery** - Reset tokens and secure password changes
+
+---
+
+## Development Workflow
+
+This project follows a collaborative Git workflow to ensure code quality and team synchronization.
+
+1.  **Main Branch:** The `main` branch is the stable, definitive version of the project. Direct pushes to `main` are not allowed.
+2.  **Development Branch:** A `dev` branch is used as the primary integration branch for new features.
+3.  **Feature Branches:** All new work (features, bug fixes) must be done on a separate feature branch (e.g., `feature/user-login`, `fix/registration-bug`).
+4.  **Pull Requests (PRs):** When a feature is complete, the developer opens a Pull Request to merge their feature branch into the `dev` branch.
+5.  **Code Review:** At least one other team member must review the Pull Request to check for bugs, style, and correctness before it can be merged. This maintains high code quality.
 
 ---
 
 ## Project Structure
 
-The project follows a standard Java package structure to keep the code organized and maintainable.
+The project follows a clean architecture with separate source and build directories.
 
 ```
-Event-Manager-System/
+Event-ms/
 ├── .gitignore
+├── LICENSE
 ├── README.md
-└── src/
-└── com/
-└── eventms/
-├── model/
-│   ├── User.java
-│   ├── Event.java
-│   ├── Role.java
-│   └── EventCategory.java
-│
-└── Main.java
+├── build.ps1           <-- PowerShell build script
+├── run.ps1             <-- PowerShell run script
+├── build/              <-- Compiled classes (auto-generated)
+│   └── classes/
+│       └── com/eventms/
+│           ├── Launcher.class
+│           ├── model/      <-- All model .class files
+│           └── service/    <-- All service .class files
+└── src/                <-- Source code
+    ├── database/
+    │   └── eventms_db.sql
+    └── main/java/
+        └── com/eventms/
+            ├── Launcher.java
+            ├── model/
+            │   ├── Admin.java
+            │   ├── Event.java
+            │   ├── EventStatus.java
+            │   ├── EventToken.java
+            │   ├── Registration.java
+            │   ├── RegistrationStatus.java
+            │   ├── Role.java
+            │   └── User.java
+            └── service/
+                ├── AuthService.java      <-- Base authentication class
+                ├── AdminService.java     <-- Extends AuthService
+                ├── EventService.java     <-- Extends AuthService
+                ├── RegistrationService.java <-- Extends AuthService
+                └── UserService.java
 ```
 
 ---
 
 ## How to Build and Run
 
-1.  **Prerequisites**:
-    * Java Development Kit (JDK) 11 or newer.
-    * An IDE like IntelliJ, Eclipse, or VS Code is recommended.
+### Prerequisites
 
-2.  **Clone the Repository**:
-    ```bash
-    git clone [https://github.com/SirOsborn/Event-Registration-System.git]
-    ```
+* Java Development Kit (JDK) 11 or newer
+* PowerShell (for Windows build scripts)
+* An IDE like IntelliJ, Eclipse, or VS Code is recommended
 
-3.  **Compile and Run from the Command Line**:
-    * Navigate to the `src` directory.
-    * Compile all Java files:
-        ```bash
-        javac com/eventms/model/*.java com/eventms/Main.java
-        ```
-    * Run the main application from the `src` directory:
-        ```bash
-        java com.eventms.Main
-        ```
+### Quick Start (Recommended)
 
-4.  **Running from an IDE**:
-    * Open the project folder in your IDE.
-    * Locate `src/com/eventms/Main.java`.
-    * Run the `main` method directly from the IDE.
+#### Using PowerShell Scripts
+
+1. **Run the application** (auto-builds if needed):
+   ```powershell
+   # Console demo version
+   .\run.ps1
+   
+   # GUI version
+   .\run.ps1 -gui
+   
+   # Show help
+   .\run.ps1 -help
+   ```
+
+2. **Build only**:
+   ```powershell
+   .\build.ps1
+   ```
+
+#### Using Command Line
+
+1. **Build the application**:
+   ```bash
+   # Create build directory
+   mkdir -p build/classes
+   
+   # Compile all classes
+   javac -d "build/classes" -cp "src/main/java" src/main/java/com/eventms/model/*.java
+   javac -d "build/classes" -cp "build/classes;src/main/java" src/main/java/com/eventms/service/*.java
+   javac -d "build/classes" -cp "build/classes" src/main/java/com/eventms/Launcher.java
+   ```
+
+2. **Run the application**:
+   ```bash
+   # GUI version
+   java -cp "build/classes" com.eventms.Launcher
+   ```
+
+### Running from an IDE
+
+1. Open the project folder in your IDE
+2. Locate `src/main/java/com/eventms/Launcher.java`
+3. Click the **Run** button - the IDE handles compilation automatically
 
 ---
 
 ## Core Features Implemented
 
-* **User Management**: Create `ORGANIZER` and `GUEST` user roles.
-* **Event Creation**: Organizers can create events with details like capacity, category, and date.
-* **Registration System**: Guests can register for events.
-* **Waiting List**: Automatically manages a waiting list when an event is full.
+### Authentication & Security
+- **OOP Inheritance Authentication** - All services extend `AuthService` base class
+- **Secure Password Hashing** - SHA-256 with salt for password storage
+- **Session Management** - Comprehensive login/logout system with session tracking
+- **Role-based Authorization** - Admin vs User privileges with proper access control
+- **Password Management** - Change passwords and reset with secure token system
+
+### User Management
+- **User Creation & Verification** - Create users with email verification
+- **Role Promotion** - Promote users to admin status
+- **Profile Management** - Update user information and preferences
+
+### Event Management
+- **Token-based Event Creation** - Admins generate secure tokens for event creation
+- **Event Lifecycle** - Create, update, cancel, and manage events
+- **Event Discovery** - Users can browse and search for events
+- **Capacity Management** - Automatic registration limits and waitlists
+
+### Registration System
+- **Authenticated Registration** - Users must be logged in to register
+- **Registration Status Tracking** - Confirmed, pending, cancelled states
+- **Event Capacity Enforcement** - Automatic capacity limit management
+
+### System Features
+- **Clean Build System** - Automated PowerShell build and run scripts
+- **Comprehensive Testing** - Full authentication flow demonstration in Main.java
+- **Error Handling** - Proper exception handling with user-friendly messages
+- **Separation of Concerns** - Clean architecture separating models, services, and main logic
+- **GUI Interface** - Java Swing-based graphical user interface
+
+### GUI Features
+- **Login Form** - Professional login interface with email and password fields
+- **Sign Up Form** - Comprehensive registration form with validation
+  - Full name, email, contact number validation
+  - Password confirmation and strength checking
+  - Date of birth selector with dropdown menus
+  - Gender selection and terms agreement
+- **Main Dashboard** - Post-login application interface
+  - User profile display and management
+  - Navigation menu for different features
+  - Status indicators and quick actions
+- **Form Validation** - Real-time validation with user-friendly error messages
+- **Responsive Design** - Clean, modern interface that works across different screen sizes
+
+### Demo Capabilities
+The system includes a comprehensive demo that showcases:
+- User creation and verification
+- Secure login with password hashing
+- Role-based user promotion (USER to ADMIN)
+- Admin-only token generation
+- Token-based event creation
+- Authenticated event registration
+- Password change and reset functionality
+- Token reusability for multiple events
+- Secure logout and session management
+- Authorization checks for all operations
+
+---
+
+## OOP Concepts Demonstrated
+
+### Inheritance
+- **Base Class**: `AuthService` provides common authentication functionality
+- **Derived Classes**: `AdminService`, `EventService`, `RegistrationService` extend `AuthService`
+- **Method Inheritance**: All services inherit `requireAuthentication()`, `requireAdmin()`, `isAuthenticated()`
+
+### Encapsulation
+- **Protected Methods**: Authentication methods are protected, allowing inheritance but preventing external access
+- **Private Fields**: User credentials and session data are encapsulated within service classes
+- **Static References**: Shared `UserService` reference through static field in base class
+
+### Polymorphism
+- **Method Overriding**: Services can override base authentication behavior if needed
+- **Interface Implementation**: Models implement interfaces like `Displayable` for consistent behavior
+
+### Abstraction
+- **Abstract Base Class**: `AuthService` cannot be instantiated directly
+- **Service Layer**: Business logic abstracted from data models
+- **Clean Interfaces**: Services provide simple method interfaces hiding complex authentication logic
+
+---
+
+## Team Members
+
+* **[Sun Heng]** - Project Lead & System Architect
+* **[Veat Bunchhour]** - Team Coordinator
+* **[Cheav Vichar]** - Member
+* **[Kheang Rachana]** - Member
+* **[Mean Sambathpoty]** - Member
+
+---
+
+## Development Workflow
+
+This project follows a collaborative Git workflow to ensure code quality and team synchronization.
+
+1. **Main Branch:** The `main` branch is the stable, production-ready version
+2. **Development Branch:** The `dev` branch is used for integration and testing
+3. **Feature Branches:** All new work done on separate feature branches
+4. **Pull Requests:** Code review required before merging to `dev` or `main`
+5. **Clean Builds:** Use automated build scripts to ensure consistent compilation
+
+### Code Standards
+- Use `//` comments instead of `/* */` 
+- Follow OOP inheritance patterns for authentication
+- Maintain clean separation between models and services
+- Include comprehensive error handling
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Future Enhancements
+
+- **Database Integration** - Connect to actual database instead of in-memory storage
+- **Web Interface** - Add REST API and web frontend
+- **Email Notifications** - Send confirmation emails for registrations
+- **Advanced Search** - Filter events by category, date, location
+- **Payment Integration** - Handle paid events and transactions
+- **Mobile App** - Cross-platform mobile application
+
+---
+
+*Event Management System v2.0 - Demonstrating advanced OOP concepts with secure authentication*

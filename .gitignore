@@ -1,5 +1,17 @@
-# Compiled Java class files
+# Ignore local environment and build artifacts
+.env
+env.ps1
+build/
 *.class
+*.log
+.DS_Store
+Thumbs.db# Compiled Java class files
+*.class
+
+# Build directories
+build/
+target/
+out/
 
 # Log files
 *.log
@@ -10,8 +22,7 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
-*.jar
+# Package Files 
 *.war
 *.nar
 *.ear
